@@ -36,11 +36,11 @@ namespace DividendAlert
 
 
             // DividendAlert configurations
-            var dividendAlertConfigs = new DividendAlertConfigs();
+            /*var dividendAlertConfigs = new DividendAlertConfigs();
             new ConfigureFromConfigurationOptions<DividendAlertConfigs>(
                 Configuration.GetSection("DividendAlertConfigs"))
                     .Configure(dividendAlertConfigs);
-
+            */
 
             app.UseMvc();
         }
