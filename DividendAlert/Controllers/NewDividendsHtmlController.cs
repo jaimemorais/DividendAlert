@@ -15,11 +15,13 @@ namespace DividendAlert.Controllers
 
         [HttpGet]
         [Produces("text/html")]
-        public async Task<string> GetAsync(string user)
+        public async Task<string> GetAsync(string userName)
         {   
-            string[] userStockList = UserData.GetUserStockList(user);          
+            User user = new User(); // TODO findByUserName
 
-            return await new NewDividendsHtmlGenerator().GenerateHtmlAsync(userStockList);            
+            string[] userStockList = user.GetUserStockList();          
+
+            return await NewDividendsHtmlGenerator.GenerateHtmlAsync(userStockList);            
         }
 
         

@@ -7,7 +7,7 @@ namespace DividendAlert.Data
     
     public class NewDividendsHtmlGenerator
     {
-        public async Task<string> GenerateHtmlAsync(string[] stockList) 
+        public static async Task<string> GenerateHtmlAsync(string[] stockList) 
         {
             const string HEADER = "<p>Today New Dividends</p>";
             string resultHtml = HEADER;
@@ -44,7 +44,7 @@ namespace DividendAlert.Data
                 return resultHtml;
             }
 
-            return "<p>Nothing for today :(</p>";
+            return string.Empty;
         }
     }
 }

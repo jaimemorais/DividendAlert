@@ -1,9 +1,11 @@
 namespace DividendAlert.Data
 {
-    public class UserData
+    public class User
     {
         
-        public static string[] GetUserStockList(string user) 
+        public string Email { get; set; }
+
+        public string[] GetUserStockList() 
         {
            // TODO get user stock list from database
             return new string[] { "ODPV", "SULA" };
