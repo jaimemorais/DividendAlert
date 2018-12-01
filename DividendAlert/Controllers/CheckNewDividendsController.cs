@@ -14,21 +14,21 @@ namespace DividendAlert.Controllers
     {
 
         [HttpGet]
+        [Produces("text/html")]
         public async Task<string> GetAsync(string token)
         {   
             
-            List<User> userList = new List<User>(); // TODO findAll
+            // TODO get logged user
+            User currentUser = new User();            
             
-            foreach (User user in userList) 
+            string html = await NewDividendsHtmlGenerator.GenerateHtmlAsync(currentUser.GetUserStockList());
+            if (!string.IsNullOrEmpty(html)) 
             {
-                string html = await NewDividendsHtmlGenerator.GenerateHtmlAsync(user.GetUserStockList());
-                if (!string.IsNullOrEmpty(html)) 
-                {
-                    SendMail(user.Email, html);
-                }
+                //SendMail(user.Email, html);
+                return html;
             }
 
-            return "OK";
+            return "<p>No dividends for today</p>";
         }
 
 

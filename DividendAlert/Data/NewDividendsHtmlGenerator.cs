@@ -10,7 +10,7 @@ namespace DividendAlert.Data
         public static async Task<string> GenerateHtmlAsync(string[] stockList) 
         {
             const string HEADER = "<p>Today New Dividends</p>";
-            string resultHtml = HEADER;
+            string resultHtml = string.Empty;
 
             using (HttpClient httpClient = new HttpClient())            
             using (HttpResponseMessage response = await httpClient.GetAsync("http://www.dividendobr.com/")) 
@@ -39,12 +39,12 @@ namespace DividendAlert.Data
                 }
             }        
 
-            if (resultHtml != HEADER) 
+            if (!string.IsNullOrEmpty(resultHtml))
             {
-                return resultHtml;
+                return HEADER + resultHtml;
             }
 
-            return string.Empty;
+            return HEADER + "<br/><p>No dividends for today</p>";
         }
     }
 }
