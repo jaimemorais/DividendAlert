@@ -9,7 +9,7 @@ namespace DividendAlert.Data
     {
         public static async Task<string> GenerateHtmlAsync(string[] stockList) 
         {
-            const string HEADER = "<p>Today New Dividends</p>";
+            const string HEADER = "<h1>Today New Dividends</h1>";
             string resultHtml = string.Empty;
 
             using (HttpClient httpClient = new HttpClient())            
