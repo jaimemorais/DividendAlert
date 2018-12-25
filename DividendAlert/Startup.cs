@@ -14,12 +14,16 @@ namespace DividendAlert
 {
     public class Startup
     {
+
+        private IConfiguration _config { get; }
+
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _config = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -43,15 +47,10 @@ namespace DividendAlert
                     .Configure(dividendAlertConfigs);
             */
 
+
             app.UseMvc();
         }
     }
 
-    public class HtmlOutputFormatter : StringOutputFormatter
-    {
-        public HtmlOutputFormatter()
-        {
-            SupportedMediaTypes.Add("text/html");
-        }
-    }
+
 }

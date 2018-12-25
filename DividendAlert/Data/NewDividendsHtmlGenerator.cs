@@ -7,44 +7,60 @@ namespace DividendAlert.Data
     
     public class NewDividendsHtmlGenerator
     {
-        public static async Task<string> GenerateHtmlAsync(string[] stockList) 
+
+        public static async Task<string> GenerateHtmlAsync(string[] stockList)
         {
-            const string HEADER = "<h1>Today New Dividends</h1>";
+            string html = await GetHtml(stockList, "http://www.dividendobr.com/", "tclass");
+
+            html += "<br/><br/><br/><br/><hr/>";
+
+            html += await GetHtml(stockList, "https://www.meusdividendos.com/anuncios-dividendos/", "timeline-item");
+
+            return html;
+        }
+
+
+        private static async Task<string> GetHtml(string[] stockList, string url, string stockHtmlClass)
+        {
+            string header = "<h2>Today New Dividends</h2> " +                            
+                            $"<a href='{url}'>{url}</a>" + 
+                            "<br/>";
+
             string resultHtml = string.Empty;
 
-            using (HttpClient httpClient = new HttpClient())            
-            using (HttpResponseMessage response = await httpClient.GetAsync("http://www.dividendobr.com/")) 
+            using (HttpClient httpClient = new HttpClient())
+            using (HttpResponseMessage response = await httpClient.GetAsync(url))
             {
-                if (response.IsSuccessStatusCode) 
+                if (response.IsSuccessStatusCode)
                 {
                     string htmlPage = await response.Content.ReadAsStringAsync();
 
                     HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
                     htmlDoc.LoadHtml(htmlPage);
 
-                    HtmlNodeCollection stockNodes = htmlDoc.DocumentNode.SelectNodes("//*[contains(@class,'tclass')]");
+                    HtmlNodeCollection stockNodes = htmlDoc.DocumentNode.SelectNodes($"//*[contains(@class,'{stockHtmlClass}')]");
 
-                    foreach (string userStock in stockList) 
+                    foreach (string userStock in stockList)
                     {
-                        foreach (HtmlNode stockNode in stockNodes)                     
+                        foreach (HtmlNode stockNode in stockNodes)
                         {
                             if (stockNode.InnerHtml.Contains(userStock))
                             {
-                                resultHtml += "<br/><br/><table>" + stockNode.InnerHtml + "</table>";                            
-                            }                       
+                                resultHtml += "<br/><br/><table>" + stockNode.InnerHtml + "</table>";
+                            }
                         }
                     }
-                    
+
 
                 }
-            }        
+            }
 
             if (!string.IsNullOrEmpty(resultHtml))
             {
-                return HEADER + resultHtml;
+                return header + resultHtml;
             }
 
-            return HEADER + "<br/><p>No dividends for today</p>";
+            return header + $"<br/><p>No dividends for today in {url}</p>";
         }
     }
 }
