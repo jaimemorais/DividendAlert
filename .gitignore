@@ -8,5 +8,6 @@
 
 
 /DividendAlert/DividendAlert.csproj.user
+/DividendAlert/appsettings.Development.json
 /.vs/DividendAlert
 /DividendAlert/Properties/PublishProfiles/FolderProfile.pubxml.user
