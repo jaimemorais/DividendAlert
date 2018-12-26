@@ -1,26 +1,26 @@
+using HtmlAgilityPack;
 using System.Net.Http;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
 
 namespace DividendAlert.Data
 {
-    
+
     public class NewDividendsHtmlGenerator
     {
 
         public static async Task<string> GenerateHtmlAsync(string[] stockList)
         {
-            string html = await GetHtml(stockList, "http://www.dividendobr.com/", "tclass");
+            string html = await GetHtmlAsync(stockList, "http://www.dividendobr.com/", "tclass");
 
             html += "<br/><br/><br/><br/><hr/>";
 
-            html += await GetHtml(stockList, "https://www.meusdividendos.com/anuncios-dividendos/", "timeline-item");
+            html += await GetHtmlAsync(stockList, "https://www.meusdividendos.com/anuncios-dividendos/", "timeline-item");
 
             return html;
         }
 
 
-        private static async Task<string> GetHtml(string[] stockList, string url, string stockHtmlClass)
+        private static async Task<string> GetHtmlAsync(string[] stockList, string url, string stockHtmlClass)
         {
             string header = "<h2>Today New Dividends</h2> " +                            
                             $"<a href='{url}'>{url}</a>" + 
