@@ -5,10 +5,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using DividendAlert.Data;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DividendAlert.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class CheckNewDividendsController : Controller
     {
