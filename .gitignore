@@ -11,3 +11,5 @@ backend/DividendAlert/DividendAlert.csproj.user
 backend/DividendAlert/appsettings.Development.json
 /.vs/DividendAlert
 backend/DividendAlert/Properties/PublishProfiles/FolderProfile.pubxml.user
+
+frontend/DividendAlertApp/src/environments/environment.ts

@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  
+  baseApiUrl: 'https://localhost:5001/api',
+  jwtAuth: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lQXBpIjoiRGl2aWRlbmRBbGVydCJ9.ixg6-znxxTn3TGwu5PSQ1yyMesB_aNWUeuJOJ7yqhgY'
+
 };
 
 /*
@@ -14,3 +18,4 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+
