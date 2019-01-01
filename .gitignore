@@ -3,11 +3,11 @@
 ################################################################################
 
 /.vscode
-/DividendAlert/bin
-/DividendAlert/obj
+backend/DividendAlert/bin
+backend/DividendAlert/obj
 
 
-/DividendAlert/DividendAlert.csproj.user
-/DividendAlert/appsettings.Development.json
+backend/DividendAlert/DividendAlert.csproj.user
+backend/DividendAlert/appsettings.Development.json
 /.vs/DividendAlert
-/DividendAlert/Properties/PublishProfiles/FolderProfile.pubxml.user
+backend/DividendAlert/Properties/PublishProfiles/FolderProfile.pubxml.user
