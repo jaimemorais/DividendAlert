@@ -17,16 +17,23 @@ namespace DividendAlert.Controllers
 
         [HttpGet]
         [Produces("text/html")]
-        public async Task<string> GetAsync(string token)
-        {   
+        public async Task<string> GetAsync(string token, string customStockList = null)
+        {
+
+            // TODO remove
+            User currentUser = new User();
+            string[] stockList = currentUser.GetUserStockList();
+
             
-            // TODO get logged user
-            User currentUser = new User();            
-            
-            string html = await NewDividendsHtmlGenerator.GenerateHtmlAsync(currentUser.GetUserStockList());
-            if (!string.IsNullOrEmpty(html)) 
+            if (customStockList != null)
             {
-                //SendMail(user.Email, html);
+                stockList = customStockList.Split(";");
+            }
+
+
+            string html = await NewDividendsHtmlGenerator.GenerateHtmlAsync(stockList);
+            if (!string.IsNullOrEmpty(html)) 
+            {                
                 return html;
             }
 
@@ -34,10 +41,5 @@ namespace DividendAlert.Controllers
         }
 
 
-        private void SendMail(string email, string html) 
-        {
-            // TODO
-        }
-        
     }
 }
