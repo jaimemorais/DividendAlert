@@ -17,7 +17,7 @@ namespace DividendAlert.Controllers
 
         [HttpGet]
         [Produces("text/html")]
-        public async Task<string> GetAsync(string token, string customStockList = null)
+        public async Task<string> GetAsync(string customStockList = null)
         {
 
             // TODO remove
