@@ -3,10 +3,14 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ShowDividendsComponent } from './show-dividends/show-dividends.component';
+import { SelectStockComponent } from './select-stock/select-stock.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ShowDividendsComponent,
+    SelectStockComponent
   ],
   imports: [
     BrowserModule,
