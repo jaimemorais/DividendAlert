@@ -1,4 +1,8 @@
 # DividendAlert
 Alert for new dividends
 
-asp.net core web api / angular / pwa
+Using :
+asp.net core web api
+docker 
+zeit
+angular / pwa 
