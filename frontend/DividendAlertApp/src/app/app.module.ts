@@ -10,9 +10,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 
 // components
 import { AppComponent } from './app.component';
-import { ShowDividendsComponent } from './components/show-dividends/show-dividends.component';
-import { SelectStockComponent } from './components/select-stock/select-stock.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
+import { SelectStockComponent } from './components/select-stock/select-stock.component';
 
 
 
@@ -20,7 +19,6 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 @NgModule({
   declarations: [
     AppComponent,
-    ShowDividendsComponent,
     SelectStockComponent,
     NavigationComponent
   ],
