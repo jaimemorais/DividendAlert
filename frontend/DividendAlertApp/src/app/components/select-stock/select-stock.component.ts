@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-select-stock',
   templateUrl: './select-stock.component.html',

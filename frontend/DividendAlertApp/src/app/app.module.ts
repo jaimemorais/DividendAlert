@@ -2,19 +2,34 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
+
+// angular material
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DividendAlertMaterialModule } from './modules/material.module';
+import { LayoutModule } from '@angular/cdk/layout';
+
+// components
 import { AppComponent } from './app.component';
-import { ShowDividendsComponent } from './show-dividends/show-dividends.component';
-import { SelectStockComponent } from './select-stock/select-stock.component';
+import { ShowDividendsComponent } from './components/show-dividends/show-dividends.component';
+import { SelectStockComponent } from './components/select-stock/select-stock.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
+
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     ShowDividendsComponent,
-    SelectStockComponent
+    SelectStockComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    DividendAlertMaterialModule,
+    LayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
