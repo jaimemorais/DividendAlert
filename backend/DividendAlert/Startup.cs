@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace DividendAlert
 {
@@ -30,7 +27,7 @@ namespace DividendAlert
 
             services.AddCors();
 
-
+            /*
             var jwtSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("JwtDividendAlertSecret")));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
@@ -44,7 +41,7 @@ namespace DividendAlert
                             RequireSignedTokens = true
                         };
                     });
-
+                    */
         }
 
 

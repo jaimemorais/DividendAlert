@@ -13,3 +13,8 @@ backend/DividendAlert/appsettings.Development.json
 backend/DividendAlert/Properties/PublishProfiles/FolderProfile.pubxml.user
 
 frontend/DividendAlertApp/src/environments/environment.ts
+/DividendAlert/bin/Debug/netcoreapp2.1
+/DividendAlert/obj
+/DividendAlert/DividendAlert.csproj.user
+/.vs/config/applicationhost.config
+/backend/DividendAlert/Properties/PublishProfiles/dividendalertjaime - Web Deploy.pubxml.user

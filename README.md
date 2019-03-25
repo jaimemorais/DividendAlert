@@ -7,6 +7,6 @@ asp.net core web api
 
 docker 
 
-zeit
+azure
 
 angular / pwa 
