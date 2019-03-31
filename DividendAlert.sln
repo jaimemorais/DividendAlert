@@ -4,6 +4,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividendAlert", "backend\DividendAlert\DividendAlert.csproj", "{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DividendAzureFunction", "DividendAzureFunction\DividendAzureFunction.csproj", "{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,18 @@ Global
 		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Release|x64.Build.0 = Release|Any CPU
 		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Release|x86.ActiveCfg = Release|Any CPU
 		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Release|x86.Build.0 = Release|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Debug|x64.Build.0 = Debug|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Debug|x86.Build.0 = Debug|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Release|x64.ActiveCfg = Release|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Release|x64.Build.0 = Release|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Release|x86.ActiveCfg = Release|Any CPU
+		{91BA43E0-32CE-4487-AEAB-8568FBB0E3D3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

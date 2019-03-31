@@ -18,3 +18,4 @@ frontend/DividendAlertApp/src/environments/environment.ts
 /DividendAlert/DividendAlert.csproj.user
 /.vs/config/applicationhost.config
 /backend/DividendAlert/Properties/PublishProfiles/dividendalertjaime - Web Deploy.pubxml.user
+/DividendAzureFunction/Properties/PublishProfiles/dividend-function - Web Deploy.pubxml

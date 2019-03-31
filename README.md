@@ -7,6 +7,8 @@ asp.net core web api
 
 docker 
 
-azure
+azure 
 
 angular / pwa 
+
+azure functions
