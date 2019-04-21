@@ -10,17 +10,15 @@ import { LayoutModule } from '@angular/cdk/layout';
 
 // components
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
 import { SelectStockComponent } from './components/select-stock/select-stock.component';
-
-
+import { MyNewsComponent } from './components/my-news/my-news.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     SelectStockComponent,
-    NavigationComponent
+    MyNewsComponent
   ],
   imports: [
     BrowserModule,
