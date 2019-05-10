@@ -2,6 +2,6 @@
 {
     public interface IMailSender
     {
-        void SendMail(string html);
+        void SendMail(string to, string html);
     }
 }

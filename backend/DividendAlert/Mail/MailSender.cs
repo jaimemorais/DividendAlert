@@ -13,26 +13,23 @@ namespace DividendAlert.Mail
             _config = config;
         }
 
-        public void SendMail(string html)
+        public void SendMail(string to, string html)
         {
-            return;
-
-            var toEmail = "patcaravelli@gmail.com";
             var subject = "New Dividend Alert";
             var body = html;
 
             MailMessage mailMsg = new MailMessage();
-            mailMsg.To.Add(new MailAddress(toEmail));
+            mailMsg.To.Add(new MailAddress(to));
             mailMsg.From = new MailAddress("alert@dividendalert.com", "DividendAlert");
             mailMsg.Subject = subject;
 
             mailMsg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(body, null, MediaTypeNames.Text.Html));
 
             SmtpClient smtpClient =
-                new SmtpClient(_config["smtpAddress"], int.Parse(_config["smtpPort"]));
+                new SmtpClient(_config["dividendAlert_smtpAddress"], int.Parse(_config["dividendAlert_smtpPort"]));
 
             smtpClient.Credentials =
-                new System.Net.NetworkCredential(_config["email"], _config["emailPwd"]);
+                new System.Net.NetworkCredential(_config["dividendAlert_email"], _config["dividendAlert_emailPwd"]);
 
             smtpClient.Send(mailMsg);
         }
