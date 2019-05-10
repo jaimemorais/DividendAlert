@@ -5,25 +5,29 @@ using System.Threading.Tasks;
 namespace DividendAlert.Data
 {
 
-    public class NewDividendsHtmlGenerator
+    public static class NewDividendsHtmlGenerator
     {
+
+        public const string NO_DIVIDENDS_FOR_TODAY = "No dividends for today";
 
         public static async Task<string> GenerateHtmlAsync(string[] stockList)
         {
-            string html = await GetHtmlAsync(stockList, "http://www.dividendobr.com/", "tclass");
+            string htmlDividendoBr = await GetHtmlAsync(stockList, "http://www.dividendobr.com/", "tclass");
+            string htmlMeusDividendos = await GetHtmlAsync(stockList, "https://www.meusdividendos.com/anuncios-dividendos/", "timeline-item");
 
-            html += "<br/><br/><br/><br/><hr/>";
+            bool noDividendsForToday =
+                htmlDividendoBr.Contains(NO_DIVIDENDS_FOR_TODAY) && htmlMeusDividendos.Contains(NO_DIVIDENDS_FOR_TODAY);
 
-            html += await GetHtmlAsync(stockList, "https://www.meusdividendos.com/anuncios-dividendos/", "timeline-item");
-
-            return html;
+            return noDividendsForToday
+                ? $"<p>{NO_DIVIDENDS_FOR_TODAY}</p>"
+                : htmlDividendoBr + "<br/><br/><br/><br/><hr/>" + htmlMeusDividendos;
         }
 
 
         private static async Task<string> GetHtmlAsync(string[] stockList, string url, string stockHtmlClass)
         {
-            string header = "<h2>Today New Dividends</h2> " +                            
-                            $"<a href='{url}'>{url}</a>" + 
+            string header = "<h2>Today New Dividends</h2> " +
+                            $"<a href='{url}'>{url}</a>" +
                             "<br/>";
 
             string resultHtml = string.Empty;
@@ -60,7 +64,7 @@ namespace DividendAlert.Data
                 return header + resultHtml;
             }
 
-            return header + $"<br/><p>No dividends for today in {url}</p>";
+            return header + $"<br/><p>{NO_DIVIDENDS_FOR_TODAY} in {url}</p>";
         }
     }
 }

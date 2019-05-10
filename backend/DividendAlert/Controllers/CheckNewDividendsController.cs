@@ -37,14 +37,15 @@ namespace DividendAlert.Controllers
 
 
             string html = await NewDividendsHtmlGenerator.GenerateHtmlAsync(stockList);
-            if (!string.IsNullOrEmpty(html))
+
+            bool newDividends = !html.Contains(NewDividendsHtmlGenerator.NO_DIVIDENDS_FOR_TODAY);
+
+            if (newDividends)
             {
                 _mailSender.SendMail("jaimemorais@gmail.com", html);
-
-                return html;
             }
 
-            return "<p>No dividends for today</p>";
+            return html;
         }
 
 
