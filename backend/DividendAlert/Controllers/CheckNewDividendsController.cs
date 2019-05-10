@@ -39,7 +39,7 @@ namespace DividendAlert.Controllers
             string html = await NewDividendsHtmlGenerator.GenerateHtmlAsync(stockList);
             if (!string.IsNullOrEmpty(html))
             {
-                _mailSender.SendMail("temp", html);
+                _mailSender.SendMail("jaimemorais@gmail.com", html);
 
                 return html;
             }
