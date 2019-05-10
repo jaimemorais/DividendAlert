@@ -19,7 +19,11 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "smtpAddress": "smtp...",
+        "smtpPort": "...",
+        "email": "...",
+        "emailPwd": "..."
       },
       "applicationUrl": "http://localhost:53823/"
     },

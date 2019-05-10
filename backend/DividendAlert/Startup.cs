@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using DividendAlert.Mail;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,11 +22,15 @@ namespace DividendAlert
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
+        {
             services.AddMvc(options => options.OutputFormatters.Add(new HtmlOutputFormatter()));
 
 
             services.AddCors();
+
+
+            services.AddSingleton<IMailSender, MailSender>();
+
 
             /*
             var jwtSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("JwtDividendAlertSecret")));
@@ -54,7 +59,7 @@ namespace DividendAlert
                 app.UseDeveloperExceptionPage();
             }
 
-            
+
 
             // TODO : define prod options
             app.UseCors(option =>
