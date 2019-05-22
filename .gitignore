@@ -25,3 +25,4 @@ frontend/DividendAlertApp/src/environments/environment.ts
 /backend/DividendAlert/Properties/launchSettings.json
 /DividendAlertData/obj
 /DividendAlertData/bin/Debug/netstandard2.0
+/DividendAlertData/bin/Release/netstandard2.0
