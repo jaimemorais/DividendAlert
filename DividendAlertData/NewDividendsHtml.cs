@@ -15,6 +15,11 @@ namespace DividendAlertData
 
         public static async Task<string> GenerateHtmlAsync(string[] stockList)
         {
+
+            // TODO 
+            // Use http://siteempresas.bovespa.com.br/consbov/ExibeFatosRelevantesCvm.asp and remove sources below
+
+
             string htmlDividendoBr = await GetHtmlAsync(stockList, "http://www.dividendobr.com/", "tclass");
             string htmlMeusDividendos = await GetHtmlAsync(stockList, "https://www.meusdividendos.com/comunicados/", "card mb-4");
 
