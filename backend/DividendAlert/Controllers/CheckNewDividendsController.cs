@@ -1,21 +1,18 @@
-using DividendAlert.Data;
 using DividendAlert.Mail;
+using DividendAlertData;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 
 namespace DividendAlert.Controllers
 {
-    //[Authorize]
+    // TODO [Authorize]
     [Route("api/[controller]")]
     public class CheckNewDividendsController : Controller
     {
-        private readonly IConfiguration _config;
         private readonly IMailSender _mailSender;
 
-        public CheckNewDividendsController(IConfiguration config, IMailSender mailSender)
+        public CheckNewDividendsController(IMailSender mailSender)
         {
-            _config = config;
             _mailSender = mailSender;
         }
 
@@ -36,9 +33,9 @@ namespace DividendAlert.Controllers
             }
 
 
-            string html = await NewDividendsHtmlGenerator.GenerateHtmlAsync(stockList);
+            string html = await NewDividendsHtml.GenerateHtmlAsync(stockList);
 
-            bool newDividends = !html.Contains(NewDividendsHtmlGenerator.NO_DIVIDENDS_FOR_TODAY);
+            bool newDividends = !html.Contains(NewDividendsHtml.NO_DIVIDENDS_FOR_TODAY);
 
             if (newDividends)
             {

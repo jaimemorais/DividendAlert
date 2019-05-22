@@ -23,3 +23,5 @@ frontend/DividendAlertApp/src/environments/environment.ts
 /backend/DividendAlert/Properties/PublishProfiles/DividendAlertBackend - Web Deploy.pubxml.user
 /backend/DividendAlert/Properties/PublishProfiles/DividendAlertBackend - Web Deploy.pubxml
 /backend/DividendAlert/Properties/launchSettings.json
+/DividendAlertData/obj
+/DividendAlertData/bin/Debug/netstandard2.0

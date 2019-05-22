@@ -1,19 +1,22 @@
 using HtmlAgilityPack;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace DividendAlert.Data
+namespace DividendAlertData
 {
 
-    public static class NewDividendsHtmlGenerator
+    public static class NewDividendsHtml
     {
 
         public const string NO_DIVIDENDS_FOR_TODAY = "No dividends for today";
 
+
         public static async Task<string> GenerateHtmlAsync(string[] stockList)
         {
             string htmlDividendoBr = await GetHtmlAsync(stockList, "http://www.dividendobr.com/", "tclass");
-            string htmlMeusDividendos = await GetHtmlAsync(stockList, "https://www.meusdividendos.com/comunicados/", "card-body");
+            string htmlMeusDividendos = await GetHtmlAsync(stockList, "https://www.meusdividendos.com/comunicados/", "card mb-4");
 
             bool noDividendsForToday =
                 htmlDividendoBr.Contains(NO_DIVIDENDS_FOR_TODAY) && htmlMeusDividendos.Contains(NO_DIVIDENDS_FOR_TODAY);
@@ -30,7 +33,7 @@ namespace DividendAlert.Data
                             $"<a href='{url}'>{url}</a>" +
                             "<br/>";
 
-            string resultHtml = string.Empty;
+            StringBuilder sbHtml = new StringBuilder();
 
             using (HttpClient httpClient = new HttpClient())
             using (HttpResponseMessage response = await httpClient.GetAsync(url))
@@ -44,24 +47,27 @@ namespace DividendAlert.Data
 
                     HtmlNodeCollection stockNodes = htmlDoc.DocumentNode.SelectNodes($"//*[contains(@class,'{stockHtmlClass}')]");
 
+                    if (!stockNodes.Any())
+                    {
+                        return $"<br/><p>Cannot read {url} source.</p>";
+                    }
+
                     foreach (string userStock in stockList)
                     {
                         foreach (HtmlNode stockNode in stockNodes)
                         {
                             if (stockNode.InnerHtml.Contains(userStock))
                             {
-                                resultHtml += "<br/><br/><table>" + stockNode.InnerHtml + "</table>";
+                                sbHtml.Append("<br/><br/><table>" + stockNode.InnerHtml + "</table>");
                             }
                         }
                     }
-
-
                 }
             }
 
-            if (!string.IsNullOrEmpty(resultHtml))
+            if (!string.IsNullOrEmpty(sbHtml.ToString()))
             {
-                return header + resultHtml;
+                return header + sbHtml.ToString();
             }
 
             return header + $"<br/><p>{NO_DIVIDENDS_FOR_TODAY} in {url}</p>";
