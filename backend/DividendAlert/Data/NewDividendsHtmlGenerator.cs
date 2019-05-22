@@ -13,7 +13,7 @@ namespace DividendAlert.Data
         public static async Task<string> GenerateHtmlAsync(string[] stockList)
         {
             string htmlDividendoBr = await GetHtmlAsync(stockList, "http://www.dividendobr.com/", "tclass");
-            string htmlMeusDividendos = await GetHtmlAsync(stockList, "https://www.meusdividendos.com/anuncios-dividendos/", "timeline-item");
+            string htmlMeusDividendos = await GetHtmlAsync(stockList, "https://www.meusdividendos.com/comunicados/", "card-body");
 
             bool noDividendsForToday =
                 htmlDividendoBr.Contains(NO_DIVIDENDS_FOR_TODAY) && htmlMeusDividendos.Contains(NO_DIVIDENDS_FOR_TODAY);
