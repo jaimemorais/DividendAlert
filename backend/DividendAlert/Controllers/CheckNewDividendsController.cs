@@ -20,7 +20,7 @@ namespace DividendAlert.Controllers
 
         [HttpGet]
         [Produces("text/html")]
-        public async Task<string> GetAsync(string customStockList = null)
+        public async Task<string> GetHtmlAsync(string customStockList = null)
         {
             // TODO remove
             User currentUser = new User();
@@ -33,9 +33,9 @@ namespace DividendAlert.Controllers
             }
 
 
-            string html = await NewDividendsHtml.GenerateHtmlAsync(stockList);
+            string html = await DividendsHtmlGenerator.GenerateHtmlAsync(stockList);
 
-            bool newDividends = !html.Contains(NewDividendsHtml.NO_DIVIDENDS_FOR_TODAY);
+            bool newDividends = !html.Contains(DividendsHtmlGenerator.NO_DIVIDENDS_FOR_TODAY);
 
             if (newDividends)
             {
@@ -43,6 +43,15 @@ namespace DividendAlert.Controllers
             }
 
             return html;
+        }
+
+
+        [HttpGet]
+        [Route("json")]
+        public async Task<string> GetJsonAsync(string customStockList = null)
+        {
+            // TODO
+            return "";
         }
 
 

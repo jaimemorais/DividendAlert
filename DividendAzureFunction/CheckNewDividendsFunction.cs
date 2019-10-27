@@ -32,7 +32,7 @@ namespace DividendAzureFunction
             else
             {
                 string[] stockList = stocks.Split(';');
-                string html = await NewDividendsHtml.GenerateHtmlAsync(stockList);
+                string html = await DividendsHtmlGenerator.GenerateHtmlAsync(stockList);
                 response = req.CreateResponse(HttpStatusCode.OK);
                 response.Content = new StringContent(html);
             }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DividendAlertData
 {
 
-    public static class NewDividendsHtml
+    public static class DividendsHtmlGenerator
     {
 
         public const string NO_DIVIDENDS_FOR_TODAY = "No dividends for today";
@@ -15,13 +15,14 @@ namespace DividendAlertData
 
         public static async Task<string> GenerateHtmlAsync(string[] stockList)
         {
+            // TODO : http://siteempresas.bovespa.com.br/consbov/ExibeFatosRelevantesCvm.asp 
 
-            // TODO 
-            // Use http://siteempresas.bovespa.com.br/consbov/ExibeFatosRelevantesCvm.asp and remove sources below
+            string url = "http://www.dividendobr.com/";
+            string htmlDividendoBr = GenerateHtml(url, await ScrapeHtmlAsync(stockList, url, "tclass"));
 
+            url = "https://www.meusdividendos.com/comunicados/";
+            string htmlMeusDividendos = GenerateHtml(url, await ScrapeHtmlAsync(stockList, url, "card mb-4"));
 
-            string htmlDividendoBr = await GetHtmlAsync(stockList, "http://www.dividendobr.com/", "tclass");
-            string htmlMeusDividendos = await GetHtmlAsync(stockList, "https://www.meusdividendos.com/comunicados/", "card mb-4");
 
             bool noDividendsForToday =
                 htmlDividendoBr.Contains(NO_DIVIDENDS_FOR_TODAY) && htmlMeusDividendos.Contains(NO_DIVIDENDS_FOR_TODAY);
@@ -32,12 +33,22 @@ namespace DividendAlertData
         }
 
 
-        private static async Task<string> GetHtmlAsync(string[] stockList, string url, string stockHtmlClass)
+        private static string GenerateHtml(string url, string htmlContent)
         {
             string header = "<h2>Today New Dividends</h2> " +
                             $"<a href='{url}'>{url}</a>" +
                             "<br/>";
 
+            if (!string.IsNullOrEmpty(htmlContent))
+            {
+                return header + htmlContent;
+            }
+
+            return header + $"<br/><p>{NO_DIVIDENDS_FOR_TODAY} in {url}</p>";
+        }
+
+        private static async Task<string> ScrapeHtmlAsync(string[] stockList, string url, string stockCssClass)
+        {
             StringBuilder sbHtml = new StringBuilder();
 
             using (HttpClient httpClient = new HttpClient())
@@ -50,7 +61,7 @@ namespace DividendAlertData
                     HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
                     htmlDoc.LoadHtml(htmlPage);
 
-                    HtmlNodeCollection stockNodes = htmlDoc.DocumentNode.SelectNodes($"//*[contains(@class,'{stockHtmlClass}')]");
+                    HtmlNodeCollection stockNodes = htmlDoc.DocumentNode.SelectNodes($"//*[contains(@class,'{stockCssClass}')]");
 
                     if (!stockNodes.Any())
                     {
@@ -70,12 +81,8 @@ namespace DividendAlertData
                 }
             }
 
-            if (!string.IsNullOrEmpty(sbHtml.ToString()))
-            {
-                return header + sbHtml.ToString();
-            }
-
-            return header + $"<br/><p>{NO_DIVIDENDS_FOR_TODAY} in {url}</p>";
+            return sbHtml.ToString();
         }
+
     }
 }
