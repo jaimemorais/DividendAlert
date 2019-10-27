@@ -9,6 +9,8 @@ docker
 
 azure 
 
-angular / pwa 
+angular 
+
+pwa 
 
 azure functions
