@@ -8,7 +8,7 @@ namespace DividendAlertData
         public string[] GetUserStockList()
         {
             // TODO get user stock list from database
-            return new string[] { "ITSA", "BBSE", "CCRO", "RADL", "ABEV", "EGIE", "HGTX", "WEGE" };
+            return new string[] { "ITSA", "BBSE", "CCRO", "RADL", "ABEV", "EGIE", "HGTX", "WEGE", "FLRY" };
         }
 
     }
