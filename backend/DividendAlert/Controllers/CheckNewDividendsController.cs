@@ -1,6 +1,8 @@
 using DividendAlert.Mail;
 using DividendAlertData;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace DividendAlert.Controllers
@@ -35,9 +37,9 @@ namespace DividendAlert.Controllers
 
             string html = await DividendsHtmlGenerator.GenerateHtmlAsync(stockList);
 
-            bool newDividends = !html.Contains(DividendsHtmlGenerator.NO_DIVIDENDS_FOR_TODAY);
+            bool hasNewDividends = !html.Contains(DividendsHtmlGenerator.NO_DIVIDENDS_FOR_TODAY);
 
-            if (newDividends)
+            if (hasNewDividends)
             {
                 _mailSender.SendMail("jaimemorais@gmail.com", html);
             }
@@ -48,10 +50,19 @@ namespace DividendAlert.Controllers
 
         [HttpGet]
         [Route("json")]
-        public async Task<string> GetJsonAsync(string customStockList = null)
+        [Produces("application/json")]
+        public async Task<IEnumerable<Dividend>> GetJsonAsync(string customStockList = null)
         {
-            // TODO
-            return "";
+            List<Dividend> dividendList = new List<Dividend>();
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string html =
+                    await httpClient.GetStringAsync("http://www.b3.com.br/pt_br/produtos-e-servicos/negociacao/renda-variavel/empresas-listadas.htm?codigo=7617");
+            }
+
+
+            return dividendList;
         }
 
 
