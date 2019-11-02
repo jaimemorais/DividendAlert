@@ -1,4 +1,4 @@
-namespace DividendAlertData
+namespace DividendAlertData.Model
 {
     public class User
     {

@@ -1,39 +1,36 @@
+using DividendAlertData.Util;
 using HtmlAgilityPack;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DividendAlertData
+namespace DividendAlertData.Services
 {
 
-    public static class DividendsHtmlGenerator
+    public class DividendsHtmlBuilder : IDividendsHtmlBuilder
     {
 
-        public const string NO_DIVIDENDS_FOR_TODAY = "No dividends for today";
 
-
-        public static async Task<string> GenerateHtmlAsync(string[] stockList)
+        public async Task<string> GenerateHtmlAsync(string[] stockList)
         {
-            // TODO : http://siteempresas.bovespa.com.br/consbov/ExibeFatosRelevantesCvm.asp 
-
             string url = "http://www.dividendobr.com/";
-            string htmlDividendoBr = GenerateHtml(url, await ScrapeHtmlAsync(stockList, url, "tclass"));
+            string htmlDividendoBr = GenerateHtml(url, await ScrapeAsync(stockList, url, "tclass"));
 
             url = "https://www.meusdividendos.com/comunicados/";
-            string htmlMeusDividendos = GenerateHtml(url, await ScrapeHtmlAsync(stockList, url, "card mb-4"));
+            string htmlMeusDividendos = GenerateHtml(url, await ScrapeAsync(stockList, url, "card mb-4"));
 
 
             bool noDividendsForToday =
-                htmlDividendoBr.Contains(NO_DIVIDENDS_FOR_TODAY) && htmlMeusDividendos.Contains(NO_DIVIDENDS_FOR_TODAY);
+                htmlDividendoBr.Contains(Constants.NO_DIVIDENDS_FOR_TODAY) && htmlMeusDividendos.Contains(Constants.NO_DIVIDENDS_FOR_TODAY);
 
             return noDividendsForToday
-                ? $"<p>{NO_DIVIDENDS_FOR_TODAY}</p>"
+                ? $"<p>{Constants.NO_DIVIDENDS_FOR_TODAY}</p>"
                 : htmlDividendoBr + "<br/><br/><br/><br/><hr/>" + htmlMeusDividendos;
         }
 
 
-        private static string GenerateHtml(string url, string htmlContent)
+        private string GenerateHtml(string url, string htmlContent)
         {
             string header = "<h2>Today New Dividends</h2> " +
                             $"<a href='{url}'>{url}</a>" +
@@ -44,10 +41,10 @@ namespace DividendAlertData
                 return header + htmlContent;
             }
 
-            return header + $"<br/><p>{NO_DIVIDENDS_FOR_TODAY} in {url}</p>";
+            return header + $"<br/><p>{Constants.NO_DIVIDENDS_FOR_TODAY} in {url}</p>";
         }
 
-        private static async Task<string> ScrapeHtmlAsync(string[] stockList, string url, string stockCssClass)
+        private async Task<string> ScrapeAsync(string[] stockList, string url, string stockCssClass)
         {
             StringBuilder sbHtml = new StringBuilder();
 

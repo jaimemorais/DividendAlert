@@ -1,4 +1,5 @@
 ﻿using DividendAlert.Mail;
+using DividendAlertData.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +30,8 @@ namespace DividendAlert
 
 
             services.AddSingleton<IMailSender, MailSender>();
-
+            services.AddScoped<IDividendsHtmlBuilder, DividendsHtmlBuilder>();
+            services.AddScoped<IDividendListBuilder, DividendListBuilder>();
 
             /*
             var jwtSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("JwtDividendAlertSecret")));

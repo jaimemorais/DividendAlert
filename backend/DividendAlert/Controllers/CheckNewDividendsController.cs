@@ -1,8 +1,9 @@
 using DividendAlert.Mail;
-using DividendAlertData;
+using DividendAlertData.Model;
+using DividendAlertData.Services;
+using DividendAlertData.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace DividendAlert.Controllers
@@ -12,10 +13,14 @@ namespace DividendAlert.Controllers
     public class CheckNewDividendsController : Controller
     {
         private readonly IMailSender _mailSender;
+        private readonly IDividendsHtmlBuilder _dividendsHtmlBuilder;
+        private readonly IDividendListBuilder _dividendListBuilder;
 
-        public CheckNewDividendsController(IMailSender mailSender)
+        public CheckNewDividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder, IDividendListBuilder dividendListBuilder)
         {
             _mailSender = mailSender;
+            _dividendsHtmlBuilder = dividendsHtmlBuilder;
+            _dividendListBuilder = dividendListBuilder;
         }
 
 
@@ -27,17 +32,14 @@ namespace DividendAlert.Controllers
             // TODO remove
             User currentUser = new User();
             string[] stockList = currentUser.GetUserStockList();
-
-
             if (customStockList != null)
             {
                 stockList = customStockList.Split(";");
             }
 
+            string html = await _dividendsHtmlBuilder.GenerateHtmlAsync(stockList);
 
-            string html = await DividendsHtmlGenerator.GenerateHtmlAsync(stockList);
-
-            bool hasNewDividends = !html.Contains(DividendsHtmlGenerator.NO_DIVIDENDS_FOR_TODAY);
+            bool hasNewDividends = !html.Contains(Constants.NO_DIVIDENDS_FOR_TODAY);
 
             if (hasNewDividends)
             {
@@ -53,16 +55,10 @@ namespace DividendAlert.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Dividend>> GetJsonAsync(string customStockList = null)
         {
-            List<Dividend> dividendList = new List<Dividend>();
+            //"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
+            //"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2"
 
-            using (HttpClient httpClient = new HttpClient())
-            {
-                string html =
-                    await httpClient.GetStringAsync("http://www.b3.com.br/pt_br/produtos-e-servicos/negociacao/renda-variavel/empresas-listadas.htm?codigo=7617");
-            }
-
-
-            return dividendList;
+            return await _dividendListBuilder.ScrapeAndBuildDividendListAsync("https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos");
         }
 
 
