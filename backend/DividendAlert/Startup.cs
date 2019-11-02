@@ -1,4 +1,5 @@
-﻿using DividendAlert.Mail;
+﻿using DividendAlert.Formatters;
+using DividendAlert.Mail;
 using DividendAlertData.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

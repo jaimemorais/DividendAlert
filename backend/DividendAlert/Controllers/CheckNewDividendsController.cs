@@ -55,10 +55,11 @@ namespace DividendAlert.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Dividend>> GetJsonAsync(string customStockList = null)
         {
+            const string uri =
             //"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
-            //"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2"
+            "http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";
 
-            return await _dividendListBuilder.ScrapeAndBuildDividendListAsync("https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos");
+            return await _dividendListBuilder.ScrapeAndBuildDividendListAsync(uri);
         }
 
 
