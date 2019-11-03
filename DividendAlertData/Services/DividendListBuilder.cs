@@ -1,6 +1,7 @@
 using DividendAlertData.Model;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -23,12 +24,19 @@ namespace DividendAlertData.Services
                     HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
                     htmlDoc.LoadHtml(html);
 
-                    HtmlNodeCollection stockNodes = htmlDoc.DocumentNode.SelectNodes($"//*[contains(@class,'ng-scope')]");
+                    HtmlNodeCollection trNodes = htmlDoc.DocumentNode.SelectNodes($"//tr");
 
-                    list.Add(new Dividend()
+                    // TODO
+                    foreach (HtmlNode trNode in trNodes)
                     {
+                        HtmlNodeCollection tdNodes = trNode.SelectNodes("//td");
 
-                    });
+                        list.Add(new Dividend()
+                        {
+                            Stock = tdNodes.FirstOrDefault().InnerText
+                        });
+                    }
+
                 }
 
             }
