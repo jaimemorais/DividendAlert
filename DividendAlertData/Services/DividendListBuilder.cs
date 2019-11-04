@@ -1,7 +1,5 @@
 using DividendAlertData.Model;
-using HtmlAgilityPack;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -24,10 +22,11 @@ namespace DividendAlertData.Services
                     HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
                     htmlDoc.LoadHtml(html);
 
-                    HtmlNodeCollection trNodes = htmlDoc.DocumentNode.SelectNodes($"//tr");
+                    string json = htmlDoc.GetElementbyId("results").GetAttributeValue("value", "").Replace("&quot;", "'");
 
-                    // TODO
-                    foreach (HtmlNode trNode in trNodes)
+                    // TODO parse json
+
+                    /*foreach (HtmlNode trNode in trNodes)
                     {
                         HtmlNodeCollection tdNodes = trNode.SelectNodes("//td");
 
@@ -35,7 +34,7 @@ namespace DividendAlertData.Services
                         {
                             Stock = tdNodes.FirstOrDefault().InnerText
                         });
-                    }
+                    }*/
 
                 }
 

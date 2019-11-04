@@ -57,7 +57,8 @@ namespace DividendAlert.Controllers
         {
             const string uri =
             //"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
-            "http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";
+            //"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";
+            "https://statusinvest.com.br/acoes/ccro3";
 
             return await _dividendListBuilder.ScrapeAndBuildDividendListAsync(uri);
         }
