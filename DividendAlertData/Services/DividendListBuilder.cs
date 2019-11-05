@@ -1,4 +1,6 @@
 using DividendAlertData.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -7,7 +9,7 @@ namespace DividendAlertData.Services
 {
     public class DividendListBuilder : IDividendListBuilder
     {
-        public async Task<IEnumerable<Dividend>> ScrapeAndBuildDividendListAsync(string uri)
+        public async Task<IEnumerable<Dividend>> ScrapeAndBuildDividendListAsync(string uri, string stock)
         {
             IList<Dividend> list = new List<Dividend>();
 
@@ -15,26 +17,30 @@ namespace DividendAlertData.Services
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string html = await httpClient.GetStringAsync(uri);
+                string html = await httpClient.GetStringAsync(uri + stock);
 
                 if (!string.IsNullOrEmpty(html))
                 {
                     HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
                     htmlDoc.LoadHtml(html);
 
-                    string json = htmlDoc.GetElementbyId("results").GetAttributeValue("value", "").Replace("&quot;", "'");
+                    string json = htmlDoc.GetElementbyId("results").GetAttributeValue("value", "").Replace("&quot;", "\"");
 
-                    // TODO parse json
+                    JArray objList = (JArray)JsonConvert.DeserializeObject(json);
 
-                    /*foreach (HtmlNode trNode in trNodes)
+                    for (int i = 0; i < objList.Count; i++)
                     {
-                        HtmlNodeCollection tdNodes = trNode.SelectNodes("//td");
+
+
 
                         list.Add(new Dividend()
                         {
-                            Stock = tdNodes.FirstOrDefault().InnerText
+                            Stock = stock,
+                            PaymentDate = objList[i]["pd"].ToString(),
+                            Type = objList[i]["et"].ToString(),
+                            Value = objList[i]["v"].ToString()
                         });
-                    }*/
+                    }
 
                 }
 
