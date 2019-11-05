@@ -25,25 +25,20 @@ namespace DividendAlertData.Services
                     htmlDoc.LoadHtml(html);
 
                     string json = htmlDoc.GetElementbyId("results").GetAttributeValue("value", "").Replace("&quot;", "\"");
-
                     JArray objList = (JArray)JsonConvert.DeserializeObject(json);
 
-                    for (int i = 0; i < objList.Count; i++)
+                    foreach (JToken obj in objList)
                     {
-
-
-
                         list.Add(new Dividend()
                         {
                             Stock = stock,
-                            PaymentDate = objList[i]["pd"].ToString(),
-                            Type = objList[i]["et"].ToString(),
-                            Value = objList[i]["v"].ToString()
+                            ExDate = obj["ed"].ToString(),
+                            PaymentDate = obj["pd"].ToString(),
+                            Type = obj["et"].ToString(),
+                            Value = obj["v"].ToString()
                         });
                     }
-
                 }
-
             }
 
 
