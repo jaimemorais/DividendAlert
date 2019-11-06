@@ -10,13 +10,13 @@ namespace DividendAlert.Controllers
 {
     // TODO [Authorize]
     [Route("api/[controller]")]
-    public class CheckNewDividendsController : Controller
+    public class DividendsController : Controller
     {
         private readonly IMailSender _mailSender;
         private readonly IDividendsHtmlBuilder _dividendsHtmlBuilder;
         private readonly IDividendListBuilder _dividendListBuilder;
 
-        public CheckNewDividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder, IDividendListBuilder dividendListBuilder)
+        public DividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder, IDividendListBuilder dividendListBuilder)
         {
             _mailSender = mailSender;
             _dividendsHtmlBuilder = dividendsHtmlBuilder;
@@ -26,6 +26,7 @@ namespace DividendAlert.Controllers
 
 
         [HttpGet]
+        [Route("html")]
         [Produces("text/html")]
         public async Task<string> GetHtmlAsync(string customStockList = null)
         {
@@ -53,12 +54,15 @@ namespace DividendAlert.Controllers
         [HttpGet]
         [Route("json")]
         [Produces("application/json")]
-        public async Task<IEnumerable<Dividend>> GetJsonAsync(string customStockList = null)
+        public async Task<IEnumerable<Dividend>> GetJsonAsync()
         {
-            const string uri =
             //"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
             //"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";
-            "https://statusinvest.com.br/acoes/";
+
+            // TODO create a hosted service to scrape all stocks listed on the database
+            // Change here to read the db
+
+            const string uri = "https://statusinvest.com.br/acoes/";
 
             return await _dividendListBuilder.ScrapeAndBuildDividendListAsync(uri, "ccro3");
         }

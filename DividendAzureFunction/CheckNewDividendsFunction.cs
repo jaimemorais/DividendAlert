@@ -1,4 +1,4 @@
-using DividendAlertData;
+using DividendAlertData.Services;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
@@ -32,7 +32,7 @@ namespace DividendAzureFunction
             else
             {
                 string[] stockList = stocks.Split(';');
-                string html = await DividendsHtmlBuilder.GenerateHtmlAsync(stockList);
+                string html = await new DividendsHtmlBuilder().GenerateHtmlAsync(stockList);
                 response = req.CreateResponse(HttpStatusCode.OK);
                 response.Content = new StringContent(html);
             }
