@@ -1,4 +1,5 @@
-﻿using DividendAlertData.Model;
+﻿using DividendAlert.Services.Auth;
+using DividendAlertData.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,12 @@ namespace DividendAlert.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsersController : ControllerBase
     {
+        private readonly IAuthService _authService;
+
+        public UsersController(IAuthService authService)
+        {
+            _authService = authService;
+        }
 
         [AllowAnonymous]
         [HttpPost("login")]
@@ -33,7 +40,7 @@ namespace DividendAlert.Controllers
 
 
 
-            user.JwtToken = null; // TODO _authService.GenerateJwtToken(user);
+            user.JwtToken = _authService.GenerateJwtToken(user);
 
             // Nao retornar a senha no json
             user.Password = null;
