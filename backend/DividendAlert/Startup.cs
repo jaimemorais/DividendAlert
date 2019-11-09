@@ -1,10 +1,16 @@
 ﻿using DividendAlert.Formatters;
 using DividendAlert.Mail;
 using DividendAlertData.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DividendAlert
 {
@@ -12,7 +18,6 @@ namespace DividendAlert
     {
 
         private IConfiguration _config { get; }
-
 
         public Startup(IConfiguration configuration)
         {
@@ -24,31 +29,50 @@ namespace DividendAlert
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => options.OutputFormatters.Add(new HtmlOutputFormatter()));
-
+            services.AddMvc(options => options.OutputFormatters.Add(new HtmlOutputFormatter()))
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddCors();
-
 
             services.AddSingleton<IMailSender, MailSender>();
             services.AddScoped<IDividendsHtmlBuilder, DividendsHtmlBuilder>();
             services.AddScoped<IDividendListBuilder, DividendListBuilder>();
 
-            /*
-            var jwtSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("JwtDividendAlertSecret")));
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
+            AddJwtAuth(services);
+        }
+
+
+        private void AddJwtAuth(IServiceCollection services)
+        {
+            services.AddAuthentication(cfg =>
+            {
+                cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                cfg.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(cfg =>
+            {
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config["JwtSecret"])),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+                cfg.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
                     {
-                        options.TokenValidationParameters = new TokenValidationParameters()
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                         {
-                            ValidateLifetime = false, 
-                            ValidateAudience = false, 
-                            ValidateIssuer = false,   
-                            IssuerSigningKey = jwtSecret,
-                            RequireSignedTokens = true
-                        };
-                    });
-                    */
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
         }
 
 
@@ -72,9 +96,11 @@ namespace DividendAlert
 
 
 
+            app.UseMvc();
+
             app.UseAuthentication();
 
-            app.UseMvc();
+
         }
     }
 

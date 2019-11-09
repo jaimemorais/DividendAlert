@@ -10,7 +10,7 @@ namespace DividendAlert.Controllers
 {
     // TODO [Authorize]
     [Route("api/[controller]")]
-    public class DividendsController : Controller
+    public class DividendsController : ControllerBase
     {
         private readonly IMailSender _mailSender;
         private readonly IDividendsHtmlBuilder _dividendsHtmlBuilder;
