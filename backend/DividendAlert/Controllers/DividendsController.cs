@@ -1,4 +1,4 @@
-using DividendAlert.Mail;
+using DividendAlert.Services.Mail;
 using DividendAlertData.Model;
 using DividendAlertData.Services;
 using DividendAlertData.Util;
@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace DividendAlert.Controllers
 {
-    // TODO [Authorize]
+
+
     [Route("api/[controller]")]
+    [ApiController]
+    // TODO [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DividendsController : ControllerBase
     {
         private readonly IMailSender _mailSender;

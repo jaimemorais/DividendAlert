@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using System.Net.Mail;
 using System.Net.Mime;
 
-namespace DividendAlert.Mail
+namespace DividendAlert.Services.Mail
 {
     public class MailSender : IMailSender
     {

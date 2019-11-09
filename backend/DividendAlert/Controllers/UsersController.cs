@@ -21,7 +21,9 @@ namespace DividendAlert.Controllers
                 return BadRequest("Email and Password are required.");
             }
 
+
             // TODO get user
+            // TODO create db
             User user = null;
 
             if (user == null)

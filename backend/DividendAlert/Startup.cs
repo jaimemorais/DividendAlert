@@ -1,5 +1,6 @@
 ﻿using DividendAlert.Formatters;
-using DividendAlert.Mail;
+using DividendAlert.Services.Auth;
+using DividendAlert.Services.Mail;
 using DividendAlertData.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -34,7 +35,8 @@ namespace DividendAlert
 
             services.AddCors();
 
-            services.AddSingleton<IMailSender, MailSender>();
+            services.AddScoped<IMailSender, MailSender>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IDividendsHtmlBuilder, DividendsHtmlBuilder>();
             services.AddScoped<IDividendListBuilder, DividendListBuilder>();
 

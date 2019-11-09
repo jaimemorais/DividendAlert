@@ -1,4 +1,4 @@
-﻿namespace DividendAlert.Mail
+namespace DividendAlert.Services.Mail
 {
     public interface IMailSender
     {
