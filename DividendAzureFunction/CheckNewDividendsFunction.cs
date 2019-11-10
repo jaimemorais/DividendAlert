@@ -1,11 +1,9 @@
 using DividendAlertData.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace DividendAzureFunction
@@ -13,34 +11,22 @@ namespace DividendAzureFunction
     public static class CheckNewDividendsFunction
     {
         [FunctionName("CheckNewDividendsFunction")]
-        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequest req, ILogger log)
         {
-            log.Info("CheckNewDividendsFunction processed a request.");
+            log.LogInformation("CheckNewDividendsFunction processed a request.");
 
-            string stocks = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "stocks", true) == 0)
-                .Value;
-
-
-            HttpResponseMessage response;
+            string stocks = req.Query["stocks"];
 
             if (stocks == null)
             {
-                response = req.CreateResponse(HttpStatusCode.BadRequest);
-                response.Content = new StringContent("<html><p>Please pass the stocks on the query string or in the request body</p></html>");
+                return new BadRequestObjectResult("<html><p>Please pass the stocks on the query string or in the request body</p></html>");
             }
             else
             {
                 string[] stockList = stocks.Split(';');
                 string html = await new DividendsHtmlBuilder().GenerateHtmlAsync(stockList);
-                response = req.CreateResponse(HttpStatusCode.OK);
-                response.Content = new StringContent(html);
+                return new OkObjectResult(html);
             }
-
-
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
-
-            return response;
         }
 
 
