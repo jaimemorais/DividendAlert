@@ -1,6 +1,6 @@
 namespace DividendAlertData.Model
 {
-    public class Dividend
+    public class Dividend : BaseMongoEntity
     {
         public string Stock { get; set; }
         public string Type { get; set; }

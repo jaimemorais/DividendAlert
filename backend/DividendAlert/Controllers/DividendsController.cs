@@ -1,8 +1,10 @@
 using DividendAlert.Services.Mail;
 using DividendAlertData.Model;
+using DividendAlertData.MongoDb;
 using DividendAlertData.Services;
 using DividendAlertData.Util;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -18,12 +20,15 @@ namespace DividendAlert.Controllers
         private readonly IMailSender _mailSender;
         private readonly IDividendsHtmlBuilder _dividendsHtmlBuilder;
         private readonly IDividendListBuilder _dividendListBuilder;
+        private readonly IUserRepository _userRepository;
 
-        public DividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder, IDividendListBuilder dividendListBuilder)
+        public DividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder, IDividendListBuilder dividendListBuilder,
+            IUserRepository userRepository)
         {
             _mailSender = mailSender;
             _dividendsHtmlBuilder = dividendsHtmlBuilder;
             _dividendListBuilder = dividendListBuilder;
+            _userRepository = userRepository;
         }
 
 
@@ -33,9 +38,11 @@ namespace DividendAlert.Controllers
         [Produces("text/html")]
         public async Task<string> GetHtmlAsync(string customStockList = null)
         {
-            // TODO remove
-            User currentUser = new User();
+
+
+            User currentUser = new User(); // TODO get by id _userRepository.GetById();
             string[] stockList = currentUser.GetUserStockList();
+
             if (customStockList != null)
             {
                 stockList = customStockList.Split(";");
@@ -59,6 +66,16 @@ namespace DividendAlert.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Dividend>> GetJsonAsync()
         {
+
+            User user = new User()
+            {
+                Id = Guid.NewGuid(),
+                Email = "jaime@teste.com"
+            };
+
+            _userRepository.Insert(user);
+
+
             //"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
             //"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";
 

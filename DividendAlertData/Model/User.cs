@@ -1,8 +1,7 @@
 namespace DividendAlertData.Model
 {
-    public class User
+    public class User : BaseMongoEntity
     {
-        public long Id { get; set; }
 
         public string Email { get; set; }
 
