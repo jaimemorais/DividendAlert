@@ -4,7 +4,6 @@ using DividendAlertData.MongoDb;
 using DividendAlertData.Services;
 using DividendAlertData.Util;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -69,11 +68,10 @@ namespace DividendAlert.Controllers
 
             User user = new User()
             {
-                Id = Guid.NewGuid(),
                 Email = "jaime@teste.com"
             };
 
-            _userRepository.Insert(user);
+            await _userRepository.InsertAsync(user);
 
 
             //"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"

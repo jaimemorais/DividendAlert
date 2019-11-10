@@ -1,18 +1,16 @@
 ﻿using DividendAlertData.Model;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace DividendAlertData.MongoDb
 {
     public class BaseMongoRepository<TEntity> : IMongoRepository<TEntity> where TEntity : BaseMongoEntity
     {
         private IMongoDatabase database;
-        private MongoCollection<TEntity> collection;
+        private IMongoCollection<TEntity> collection;
 
         private IConfiguration _config;
 
@@ -23,48 +21,28 @@ namespace DividendAlertData.MongoDb
             GetCollection(collectionName);
         }
 
-        public bool Insert(TEntity entity)
+        public async Task InsertAsync(TEntity entity)
         {
             entity.Id = Guid.NewGuid();
-            return collection.Insert(entity).DocumentsAffected > 0;
+            await collection.InsertOneAsync(entity);
         }
 
-        public bool Update(TEntity entity)
-        {
-            if (entity.Id == null)
-                return Insert(entity);
 
-            return collection
-                .Save(entity)
-                .DocumentsAffected > 0;
-        }
-
-        public bool Delete(TEntity entity)
+        public async Task<TEntity> GetByIdAsync(Guid id)
         {
-            return collection
-                .Remove(Query.EQ("id", entity.Id))
-                .DocumentsAffected > 0;
-        }
+            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, id);
 
-        public IList<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
-        {
-            // TODO
-            /*return collection
-                .AsQueryable<TEntity>()
-                .Where(predicate.Compile())
-                .ToList();*/
+            var result = await collection.FindAsync(filter);
+
+            if (result != null && result.Current != null && result.Current.Count() == 1)
+            {
+                return result.Current.Single();
+            }
+
             return null;
         }
 
-        public IList<TEntity> GetAll()
-        {
-            return collection.FindAllAs<TEntity>().ToList();
-        }
 
-        public TEntity GetById(Guid id)
-        {
-            return collection.FindOneByIdAs<TEntity>(id);
-        }
 
 
         private void GetDatabase()
@@ -75,7 +53,7 @@ namespace DividendAlertData.MongoDb
 
         private void GetCollection(string collectionName)
         {
-            collection = (MongoCollection<TEntity>)database.GetCollection<TEntity>(collectionName);
+            collection = database.GetCollection<TEntity>(collectionName);
         }
 
     }
