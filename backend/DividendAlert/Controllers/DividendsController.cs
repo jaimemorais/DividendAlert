@@ -66,12 +66,11 @@ namespace DividendAlert.Controllers
         public async Task<IEnumerable<Dividend>> GetJsonAsync()
         {
 
-            User user = new User()
-            {
-                Email = "jaime@teste.com"
-            };
 
-            await _userRepository.InsertAsync(user);
+            User user = await _userRepository.GetByIdAsync(new System.Guid(Request.Headers["DividendAlertUserId"]));
+
+            // TODO
+            // user.GetUserStockList()
 
 
             //"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"

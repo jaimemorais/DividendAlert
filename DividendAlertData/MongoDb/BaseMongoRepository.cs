@@ -17,15 +17,12 @@ namespace DividendAlertData.MongoDb
         public BaseMongoRepository(IConfiguration config, string collectionName)
         {
             _config = config;
-            GetDatabase();
-            GetCollection(collectionName);
+
+            ConfigDatabase();
+            ConfigCollection(collectionName);
         }
 
-        public async Task InsertAsync(TEntity entity)
-        {
-            entity.Id = Guid.NewGuid();
-            await collection.InsertOneAsync(entity);
-        }
+
 
 
         public async Task<TEntity> GetByIdAsync(Guid id)
@@ -43,16 +40,34 @@ namespace DividendAlertData.MongoDb
         }
 
 
-
-
-        private void GetDatabase()
+        public async Task InsertAsync(TEntity entity)
         {
-            var client = new MongoClient(_config["MongoConnection"]);
+            entity.Id = Guid.NewGuid();
+            await collection.InsertOneAsync(entity);
+        }
+
+
+
+
+
+        private void ConfigDatabase()
+        {
+            MongoClientSettings mongoClientSettings = new MongoClientSettings()
+            {
+                Server = new MongoServerAddress(_config["MongoHost"], int.Parse(_config["MongoPort"])),
+                Credential = MongoCredential.CreateCredential(_config["MongoDatabaseName"], _config["MongoUser"], _config["MongoPassword"]),
+                RetryWrites = false,
+                RetryReads = false
+            };
+
+            var client = new MongoClient(mongoClientSettings);
+
             database = client.GetDatabase(_config["MongoDatabaseName"]);
         }
 
-        private void GetCollection(string collectionName)
+        private void ConfigCollection(string collectionName)
         {
+
             collection = database.GetCollection<TEntity>(collectionName);
         }
 
