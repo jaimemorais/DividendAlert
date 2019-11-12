@@ -1,8 +1,10 @@
 ﻿using DividendAlert.Services.Auth;
 using DividendAlertData.Model;
+using DividendAlertData.MongoDb;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace DividendAlert.Controllers
 {
@@ -12,15 +14,17 @@ namespace DividendAlert.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(IAuthService authService)
+        public UsersController(IAuthService authService, IUserRepository userRepository)
         {
             _authService = authService;
+            _userRepository = userRepository;
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public ActionResult Login([FromForm]string email, [FromForm]string pwd)
+        public async Task<IActionResult> Login([FromForm]string email, [FromForm]string pwd)
         {
             if (string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(pwd))
@@ -28,21 +32,15 @@ namespace DividendAlert.Controllers
                 return BadRequest("Email and Password are required.");
             }
 
+            User user = await _userRepository.GetByEmailAsync(email);
 
-            // TODO get user
-            // TODO create db
-            User user = null;
-
-            if (user == null)
+            if (user == null || !_authService.CheckPwd(pwd, user.Password))
             {
-                return Unauthorized("Invalid Email/Password.");
+                return Unauthorized();
             }
-
-
 
             user.JwtToken = _authService.GenerateJwtToken(user);
 
-            // Nao retornar a senha no json
             user.Password = null;
 
             return Ok(user);

@@ -9,5 +9,6 @@ namespace DividendAlertData.MongoDb
         Task InsertAsync(TEntity entity);
 
         Task<TEntity> GetByIdAsync(Guid id);
+
     }
 }

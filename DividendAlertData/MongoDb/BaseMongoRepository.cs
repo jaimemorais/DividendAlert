@@ -9,10 +9,9 @@ namespace DividendAlertData.MongoDb
 {
     public class BaseMongoRepository<TEntity> : IMongoRepository<TEntity> where TEntity : BaseMongoEntity
     {
-        private IMongoDatabase database;
-        private IMongoCollection<TEntity> collection;
-
         private IConfiguration _config;
+        private IMongoDatabase database;
+        protected IMongoCollection<TEntity> collection;
 
         public BaseMongoRepository(IConfiguration config, string collectionName)
         {
