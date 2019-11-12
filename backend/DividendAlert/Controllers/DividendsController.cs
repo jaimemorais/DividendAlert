@@ -3,6 +3,8 @@ using DividendAlertData.Model;
 using DividendAlertData.MongoDb;
 using DividendAlertData.Services;
 using DividendAlertData.Util;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ namespace DividendAlert.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    // TODO [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DividendsController : ControllerBase
     {
         private readonly IMailSender _mailSender;
