@@ -1,8 +1,8 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+FROM microsoft/dotnet:3.0-aspnetcore-runtime AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM microsoft/aspnetcore-build:2.0 AS build
+FROM microsoft/aspnetcore-build:3.0 AS build
 WORKDIR /src
 COPY ["DividendAlert/DividendAlert.csproj", "DividendAlert/"]
 RUN dotnet restore "DividendAlert/DividendAlert.csproj"

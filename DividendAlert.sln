@@ -2,11 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividendAlert", "backend\DividendAlert\DividendAlert.csproj", "{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividendAlertData", "DividendAlertData\DividendAlertData.csproj", "{50DAC69C-5F7E-474C-9D6F-EE6647801B82}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividendAzureFunction", "DividendAzureFunction\DividendAzureFunction.csproj", "{370A94DB-4792-4497-9D51-4CDA0359B4C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividendAlertApi", "DividendAlertApi\DividendAlertApi.csproj", "{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,18 +18,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Debug|x64.Build.0 = Debug|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Debug|x86.Build.0 = Debug|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Release|x64.ActiveCfg = Release|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Release|x64.Build.0 = Release|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Release|x86.ActiveCfg = Release|Any CPU
-		{E6C063FE-BDAD-410E-99A9-3D17B0A00C77}.Release|x86.Build.0 = Release|Any CPU
 		{50DAC69C-5F7E-474C-9D6F-EE6647801B82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{50DAC69C-5F7E-474C-9D6F-EE6647801B82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50DAC69C-5F7E-474C-9D6F-EE6647801B82}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -54,6 +42,18 @@ Global
 		{370A94DB-4792-4497-9D51-4CDA0359B4C3}.Release|x64.Build.0 = Release|Any CPU
 		{370A94DB-4792-4497-9D51-4CDA0359B4C3}.Release|x86.ActiveCfg = Release|Any CPU
 		{370A94DB-4792-4497-9D51-4CDA0359B4C3}.Release|x86.Build.0 = Release|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Debug|x64.Build.0 = Debug|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Debug|x86.Build.0 = Debug|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Release|x64.ActiveCfg = Release|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Release|x64.Build.0 = Release|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Release|x86.ActiveCfg = Release|Any CPU
+		{8CAB3FEE-EFF1-4209-83BF-0BDD221DA34D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
