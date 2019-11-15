@@ -34,15 +34,14 @@ namespace DividendAlert.Controllers
         }
 
 
-
+        // TODO remove this temporary method (also remove HtmlOutputFormatter class)
+        [AllowAnonymous]
         [HttpGet]
         [Route("html")]
         [Produces("text/html")]
         public async Task<string> GetHtmlAsync(string customStockList = null)
         {
-
-
-            User currentUser = new User(); // TODO get by id _userRepository.GetById();
+            User currentUser = new User(); 
             string[] stockList = currentUser.GetUserStockList();
 
             if (customStockList != null)
