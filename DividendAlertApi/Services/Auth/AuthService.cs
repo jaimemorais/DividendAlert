@@ -29,7 +29,7 @@ namespace DividendAlert.Services.Auth
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Email, user.Email)
                 }),
 
                 Expires = DateTime.UtcNow.AddSeconds(double.Parse(_config["JwtExpirationInSeconds"])),

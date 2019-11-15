@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DividendAlert.Controllers
@@ -67,9 +68,8 @@ namespace DividendAlert.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Dividend>> GetJsonAsync()
         {
-
-
-            User user = await _userRepository.GetByIdAsync(new System.Guid(Request.Headers["DividendAlertUserId"]));
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            User user = await _userRepository.GetByEmailAsync(identity.FindFirst("Email").Value);
 
             // TODO
             // user.GetUserStockList()
