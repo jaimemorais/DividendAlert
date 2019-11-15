@@ -32,3 +32,6 @@ frontend/DividendAlertApp/src/environments/environment.ts
 /DividendAlertApi/appsettings.Development.json
 /DividendAlertApi/DividendAlertApi.csproj.user
 /frontend/package-lock.json
+/DividendAlertApi/Properties/PublishProfiles
+/DividendAlertApi/Properties/PublishProfiles
+/DividendAlertApi/bin/Release/netcoreapp3.0
