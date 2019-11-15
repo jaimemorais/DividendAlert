@@ -1,6 +1,7 @@
 ﻿using DividendAlert.Formatters;
 using DividendAlert.Services.Auth;
 using DividendAlert.Services.Mail;
+using DividendAlertApi.Middlewares;
 using DividendAlertData.MongoDb;
 using DividendAlertData.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -89,7 +90,10 @@ namespace DividendAlert
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            else
+            {
+                app.UseMiddleware<ExceptionHandlerMiddleware>();
+            }
 
 
             // TODO : define prod options
