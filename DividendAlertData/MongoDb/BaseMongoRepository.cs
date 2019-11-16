@@ -45,7 +45,11 @@ namespace DividendAlertData.MongoDb
             await collection.InsertOneAsync(entity);
         }
 
-
+        public async Task ReplaceAsync(TEntity entity)
+        {
+            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
+            await collection.ReplaceOneAsync(filter, entity);
+        }
 
 
 
