@@ -9,7 +9,7 @@ namespace DividendAlertData.Model
 
         public string JwtToken { get; set; }
 
-        public string PasswordRecoverCode { get; set; }
+        public string PasswordResetCode { get; set; }
 
 
         public string[] GetUserStockList()

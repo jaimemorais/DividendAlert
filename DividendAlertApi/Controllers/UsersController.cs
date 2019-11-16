@@ -81,8 +81,8 @@ namespace DividendAlert.Controllers
 
 
         [AllowAnonymous]
-        [HttpPost("sendRecoverCode")]
-        public async Task<IActionResult> SendRecoverCode([FromForm]string email)
+        [HttpPost("sendPasswordResetCode")]
+        public async Task<IActionResult> SendResetCode([FromForm]string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
@@ -90,26 +90,26 @@ namespace DividendAlert.Controllers
             }
 
             User user = await _userRepository.GetByEmailAsync(email);
-            user.PasswordRecoverCode = new Guid().ToString();
+            user.PasswordResetCode = new Guid().ToString();
             await _userRepository.ReplaceAsync(user);
 
-            _mailSender.SendMail(email, "Your password recover code : " + user.PasswordRecoverCode);
+            _mailSender.SendMail(email, "Your password reset code : " + user.PasswordResetCode);
             
             return Ok();
         }
 
         [AllowAnonymous]
-        [HttpPost("SetNewPassword")]
-        public async Task<IActionResult> SetNewPassword([FromForm]string email, [FromForm]string recoverCode, [FromForm]string newPassword)
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromForm]string email, [FromForm]string resetCode, [FromForm]string newPassword)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrEmpty(recoverCode) || string.IsNullOrEmpty(newPassword))
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrEmpty(resetCode) || string.IsNullOrEmpty(newPassword))
             {
-                return BadRequest("Email/password and recover code are required.");
+                return BadRequest("Email/password and reset code are required.");
             }
 
             User user = await _userRepository.GetByEmailAsync(email);
             
-            if (user.PasswordRecoverCode == recoverCode)
+            if (user.PasswordResetCode == resetCode)
             {
                 user.Password = _authService.GeneratePwdHash(newPassword);
                 await _userRepository.ReplaceAsync(user);
