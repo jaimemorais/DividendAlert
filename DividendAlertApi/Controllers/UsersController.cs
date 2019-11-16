@@ -22,6 +22,35 @@ namespace DividendAlert.Controllers
             _userRepository = userRepository;
         }
 
+
+        [AllowAnonymous]
+        [HttpPost("create")]
+        public async Task<IActionResult> Create([FromForm]string email, [FromForm]string pwd)
+        {
+            if (string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(pwd))
+            {
+                return BadRequest("Email and Password are required.");
+            }
+
+            if (await _userRepository.GetByEmailAsync(email) != null)
+            {
+                return BadRequest("There's already and account with this email.");
+            }
+
+            User user = new User
+            {
+                Id = new System.Guid(),
+                Email = email,
+                Password = pwd
+            };
+
+            await _userRepository.InsertAsync(user);
+                        
+            return Ok();
+        }
+
+
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromForm]string email, [FromForm]string pwd)
