@@ -1,5 +1,6 @@
 ﻿using DividendAlertData.Model;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DividendAlertData.MongoDb
@@ -12,5 +13,6 @@ namespace DividendAlertData.MongoDb
 
         Task<TEntity> GetByIdAsync(Guid id);
 
+        Task<IList<TEntity>> GetAllAsync();
     }
 }

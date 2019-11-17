@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,7 +23,10 @@ namespace DividendAlertData.MongoDb
         }
 
 
-
+        public async Task<IList<TEntity>> GetAllAsync()
+        {
+            return await (await collection.FindAsync(_ => true)).ToListAsync();
+        }
 
         public async Task<TEntity> GetByIdAsync(Guid id)
         {

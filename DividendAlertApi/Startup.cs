@@ -43,6 +43,7 @@ namespace DividendAlert
             services.AddScoped<IDividendListBuilder, DividendListBuilder>();
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IStockRepository, StockRepository>();
 
 
             AddJwtAuth(services);
@@ -114,7 +115,7 @@ namespace DividendAlert
             {
                 endpoints.MapControllers();
             });
-            
+
 
         }
     }
