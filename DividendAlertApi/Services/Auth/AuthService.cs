@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -44,7 +45,15 @@ namespace DividendAlert.Services.Auth
 
 
 
-
+        public string GenerateResetCode()
+        {
+            Random random = new Random();
+            string resetCode = new string(
+                Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 6)
+                          .Select(s => s[random.Next(s.Length)])
+                          .ToArray());
+            return resetCode;
+        }
 
         private const int ITERATIONS = 50000;
 

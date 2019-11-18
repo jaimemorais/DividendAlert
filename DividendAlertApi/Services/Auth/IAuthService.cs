@@ -7,6 +7,9 @@ namespace DividendAlert.Services.Auth
         string GenerateJwtToken(User user);
 
         string GeneratePwdHash(string pwd);
+
+        string GenerateResetCode();
+
         bool CheckPwd(string informedPwd, string userPwd);
 
     }

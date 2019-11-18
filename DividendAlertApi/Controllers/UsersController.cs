@@ -44,13 +44,13 @@ namespace DividendAlert.Controllers
 
             User user = new User
             {
-                Id = new System.Guid(),
+                Id = Guid.NewGuid(),
                 Email = email,
                 Password = pwd
             };
 
             await _userRepository.InsertAsync(user);
-                        
+
             return Ok();
         }
 
@@ -90,11 +90,11 @@ namespace DividendAlert.Controllers
             }
 
             User user = await _userRepository.GetByEmailAsync(email);
-            user.PasswordResetCode = new Guid().ToString();
+            user.PasswordResetCode = _authService.GenerateResetCode();
             await _userRepository.ReplaceAsync(user);
 
             _mailSender.SendMail(email, "Your password reset code : " + user.PasswordResetCode);
-            
+
             return Ok();
         }
 
@@ -108,7 +108,7 @@ namespace DividendAlert.Controllers
             }
 
             User user = await _userRepository.GetByEmailAsync(email);
-            
+
             if (user.PasswordResetCode == resetCode)
             {
                 user.Password = _authService.GeneratePwdHash(newPassword);
