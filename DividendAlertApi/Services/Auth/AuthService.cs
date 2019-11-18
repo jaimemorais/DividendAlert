@@ -59,8 +59,8 @@ namespace DividendAlert.Services.Auth
 
         public string GeneratePwdHash(string pwd)
         {
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            byte[] salt = new byte[16];
+            new RNGCryptoServiceProvider().GetBytes(salt);
 
             Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(pwd, salt, ITERATIONS);
             byte[] pBKDF2Bytes = pbkdf2.GetBytes(20);

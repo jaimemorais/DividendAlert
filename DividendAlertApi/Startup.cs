@@ -44,6 +44,7 @@ namespace DividendAlert
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IStockRepository, StockRepository>();
+            services.AddScoped<IDividendRepository, DividendRepository>();
 
 
             AddJwtAuth(services);

@@ -9,7 +9,7 @@ namespace DividendAlertData.Services
 {
     public class DividendListBuilder : IDividendListBuilder
     {
-        public async Task<IEnumerable<Dividend>> ScrapeAndBuildDividendListAsync(string uri, string stock)
+        public async Task<IEnumerable<Dividend>> ScrapeAndBuildDividendListAsync(string uri, string stockName)
         {
             IList<Dividend> list = new List<Dividend>();
 
@@ -17,7 +17,7 @@ namespace DividendAlertData.Services
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string html = await httpClient.GetStringAsync(uri + stock);
+                string html = await httpClient.GetStringAsync(uri + stockName);
 
                 if (!string.IsNullOrEmpty(html))
                 {
@@ -31,7 +31,7 @@ namespace DividendAlertData.Services
                     {
                         list.Add(new Dividend()
                         {
-                            Stock = stock,
+                            StockName = stockName,
                             ExDate = obj["ed"].ToString(),
                             PaymentDate = obj["pd"].ToString(),
                             Type = obj["et"].ToString(),
