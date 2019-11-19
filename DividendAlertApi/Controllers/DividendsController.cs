@@ -23,16 +23,14 @@ namespace DividendAlert.Controllers
     {
         private readonly IMailSender _mailSender;
         private readonly IDividendsHtmlBuilder _dividendsHtmlBuilder;
-        private readonly IDividendListBuilder _dividendListBuilder;
         private readonly IUserRepository _userRepository;
         private readonly IDividendRepository _dividendRepository;
 
-        public DividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder, IDividendListBuilder dividendListBuilder,
+        public DividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder,
             IUserRepository userRepository, IDividendRepository dividendRepository)
         {
             _mailSender = mailSender;
             _dividendsHtmlBuilder = dividendsHtmlBuilder;
-            _dividendListBuilder = dividendListBuilder;
             _userRepository = userRepository;
             _dividendRepository = dividendRepository;
         }
