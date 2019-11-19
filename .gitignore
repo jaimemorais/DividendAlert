@@ -35,3 +35,6 @@ frontend/DividendAlertApp/src/environments/environment.ts
 /DividendAlertApi/Properties/PublishProfiles
 /DividendAlertApi/Properties/PublishProfiles
 /DividendAlertApi/bin/Release/netcoreapp3.0
+/DividendScraperService/obj
+/DividendScraperService/Properties/launchSettings.json
+/DividendScraperService/appsettings.Development.json

@@ -71,18 +71,12 @@ namespace DividendAlert.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Dividend>> GetJsonAsync()
         {
-            // TODO create a hosted service to scrape all stocks listed on the database and remove the return below
-            ////"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
-            ////"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";            
-            return await _dividendListBuilder.ScrapeAndBuildDividendListAsync("https://statusinvest.com.br/acoes/", "ccro3");
-
-
-
             var claims = HttpContext.User.Identity as ClaimsIdentity;
             User user = await _userRepository.GetByEmailAsync(claims.FindFirst("Email").Value);
 
             ////stocks = "ITSA;BBSE;CCRO;RADL;ABEV;EGIE;HGTX;WEGE;FLRY"
             string[] stockList = user.StockList.Split(";");
+
             List<Dividend> result = new List<Dividend>();
             foreach (string stockName in stockList)
             {
@@ -90,8 +84,8 @@ namespace DividendAlert.Controllers
                 var last7Days = dividendList.Where(d => d.DateAdded.AddDays(-7) >= DateTime.Now);
                 result.AddRange(last7Days);
             }
-            return result;
 
+            return result;
         }
 
 

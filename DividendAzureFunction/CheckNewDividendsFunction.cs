@@ -11,7 +11,9 @@ namespace DividendAzureFunction
     public static class CheckNewDividendsFunction
     {
         [FunctionName("CheckNewDividendsFunction")]
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequest req, ILogger log)
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
         {
             log.LogInformation("CheckNewDividendsFunction processed a request.");
 
@@ -28,9 +30,5 @@ namespace DividendAzureFunction
                 return new OkObjectResult(html);
             }
         }
-
-
-
-
     }
 }
