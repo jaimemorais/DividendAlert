@@ -26,9 +26,9 @@ namespace DividendAlertData.MongoDb
             return await (await collection.FindAsync(_ => true)).ToListAsync();
         }
 
-        public async Task<TEntity> GetByIdAsync(Guid id)
+        public async Task<TEntity> GetByIdAsync(string guid)
         {
-            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, id);
+            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, new Guid(guid));
 
             var result = await collection.FindAsync(filter);
 

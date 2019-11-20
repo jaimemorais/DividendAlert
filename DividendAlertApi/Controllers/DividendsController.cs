@@ -68,12 +68,16 @@ namespace DividendAlert.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Dividend>> GetJsonAsync()
         {
+            IList<User> lista = await _userRepository.GetAllAsync();
+
             var claims = HttpContext.User.Identity as ClaimsIdentity;
             //User user = await _userRepository.GetByEmailAsync(claims.FindFirst("Email").Value);
             User user = await _userRepository.GetByEmailAsync("jaime@teste.com");
 
-            ////stocks = "ITSA;BBSE;CCRO;RADL;ABEV;EGIE;HGTX;WEGE;FLRY"
+
+            //// "ITSA;BBSE;CCRO;RADL;ABEV;EGIE;HGTX;WEGE;FLRY".Split(";");
             string[] stockList = user.StockList.Split(";");
+
 
             List<Dividend> result = new List<Dividend>();
             foreach (string stockName in stockList)

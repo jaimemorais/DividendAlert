@@ -1,5 +1,4 @@
 ﻿using DividendAlertData.Model;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace DividendAlertData.MongoDb
 
         Task ReplaceAsync(TEntity entity);
 
-        Task<TEntity> GetByIdAsync(Guid id);
+        Task<TEntity> GetByIdAsync(string id);
 
         Task<IList<TEntity>> GetAllAsync();
     }
