@@ -42,9 +42,12 @@ namespace DividendAlert
             services.AddScoped<IDividendsHtmlBuilder, DividendsHtmlBuilder>();
             services.AddScoped<IDividendListBuilder, DividendListBuilder>();
 
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IStockRepository, StockRepository>();
-            services.AddScoped<IDividendRepository, DividendRepository>();
+            string mongoConnectionString = _config["MongoConnectionString"];
+            string mongoDatabase = _config["MongoDatabase"];
+
+            services.AddSingleton<IUserRepository>(r => new UserRepository(mongoConnectionString, mongoDatabase));
+            services.AddSingleton<IStockRepository>(r => new StockRepository(mongoConnectionString, mongoDatabase));
+            services.AddSingleton<IDividendRepository>(r => new DividendRepository(mongoConnectionString, mongoDatabase));
 
 
             AddJwtAuth(services);

@@ -3,7 +3,6 @@ using DividendAlertData.Model;
 using DividendAlertData.MongoDb;
 using DividendAlertData.Services;
 using DividendAlertData.Util;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,7 +17,7 @@ namespace DividendAlert.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DividendsController : ControllerBase
     {
         private readonly IMailSender _mailSender;
@@ -70,7 +69,8 @@ namespace DividendAlert.Controllers
         public async Task<IEnumerable<Dividend>> GetJsonAsync()
         {
             var claims = HttpContext.User.Identity as ClaimsIdentity;
-            User user = await _userRepository.GetByEmailAsync(claims.FindFirst("Email").Value);
+            //User user = await _userRepository.GetByEmailAsync(claims.FindFirst("Email").Value);
+            User user = await _userRepository.GetByEmailAsync("jaime@teste.com");
 
             ////stocks = "ITSA;BBSE;CCRO;RADL;ABEV;EGIE;HGTX;WEGE;FLRY"
             string[] stockList = user.StockList.Split(";");

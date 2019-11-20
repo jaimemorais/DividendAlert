@@ -1,5 +1,4 @@
 ﻿using DividendAlertData.Model;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ namespace DividendAlertData.MongoDb
     public class StockRepository : BaseMongoRepository<Stock>, IStockRepository
     {
 
-        public StockRepository(IConfiguration config) : base(config, "stocks")
+        public StockRepository(string connectionString, string databaseName) : base(connectionString, databaseName, "stocks")
         {
         }
 

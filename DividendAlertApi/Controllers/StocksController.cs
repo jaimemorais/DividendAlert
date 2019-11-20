@@ -25,7 +25,7 @@ namespace DividendAlertApi.Controllers
 
         [HttpGet]
         [Route("stockList")]
-        [Produces("json")]
+        [Produces("application/json")]
         public async Task<IEnumerable<string>> GetStockList()
         {
             IList<Stock> lista = await _stockRepository.GetAllAsync();
