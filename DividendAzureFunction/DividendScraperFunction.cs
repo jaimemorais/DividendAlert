@@ -1,9 +1,11 @@
 using DividendAlertData.Model;
+using DividendAlertData.MongoDb;
 using DividendAlertData.Services;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DividendAzureFunction
@@ -21,19 +23,33 @@ namespace DividendAzureFunction
         {
             //// https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
             //// https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
-            ///
+
+            log.LogInformation($"DividendScraperFunction started at: {DateTime.Now}");
 
 
-            // TODO scrape all stocks listed on the database and save new dividends to mongodb
+            string connectionString = ""; // TODO read config
+            string databaseName = ""; // TODO read config
 
-            //IStockRepository stockRepository = new StockRepository()
+            IDividendRepository dividendRepository = new DividendRepository(connectionString, databaseName);
+            IStockRepository stockRepository = new StockRepository(connectionString, databaseName);
+            IList<Stock> stockList = await stockRepository.GetAllAsync();
 
-            IEnumerable<Dividend> dividendList =
-                await new DividendListBuilder().ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, "ccro3");
+            foreach (Stock stock in stockList)
+            {
+                IEnumerable<Dividend> scrapedList =
+                    await new DividendListBuilder().ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, stock.Name);
 
+                foreach (Dividend scrapedDividend in scrapedList)
+                {
+                    if (!(await dividendRepository.GetByStockAsync(scrapedDividend)).Any())
+                    {
+                        await dividendRepository.InsertAsync(scrapedDividend);
+                    }
+                }
 
+            }
 
-            log.LogInformation($"DividendScraperFunction executed at: {DateTime.Now}");
+            log.LogInformation($"DividendScraperFunction finished at: {DateTime.Now}");
         }
     }
 }

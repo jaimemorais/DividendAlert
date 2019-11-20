@@ -22,6 +22,25 @@ namespace DividendAlertData.MongoDb
             return result.ToEnumerable();
         }
 
+        public async Task<IEnumerable<Dividend>> GetByStockAsync(Dividend dividend)
+        {
+            FilterDefinition<Dividend> filterName = Builders<Dividend>.Filter.Eq(s => s.StockName, dividend.StockName);
+            FilterDefinition<Dividend> filterPaymentDate = Builders<Dividend>.Filter.Eq(s => s.PaymentDate, dividend.PaymentDate);
+            FilterDefinition<Dividend> filterExDate = Builders<Dividend>.Filter.Eq(s => s.ExDate, dividend.ExDate);
+            FilterDefinition<Dividend> filterType = Builders<Dividend>.Filter.Eq(s => s.Type, dividend.Type);
+
+            FilterDefinition<Dividend> combineFilters = Builders<Dividend>.Filter.And(
+                filterName,
+                filterType,
+                filterExDate,
+                filterPaymentDate);
+
+
+            var result = await collection.FindAsync(combineFilters);
+
+            return result.ToEnumerable();
+        }
+
     }
 
 }
