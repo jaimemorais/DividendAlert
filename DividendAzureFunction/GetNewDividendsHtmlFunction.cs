@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace DividendAzureFunction
 {
-    public static class CheckNewDividendsFunction
+    public static class GetNewDividendsHtmlFunction
     {
-        [FunctionName("CheckNewDividendsFunction")]
+        [FunctionName("GetNewDividendsHtmlFunction")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("CheckNewDividendsFunction processed a request.");
+            log.LogInformation("GetNewDividendsHtmlFunction processed a request.");
 
             string stocks = req.Query["stocks"];
 
