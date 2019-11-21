@@ -101,15 +101,14 @@ namespace DividendAlert.Controllers
             ////"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";            
             const string DIVIDEND_SITE_URI = "https://statusinvest.com.br/acoes/";
 
-            /*
-            await _stockRepository.InsertAsync(new Stock()
-            {
-                Id = new Guid(),
-                Name = "CCRO3"
-            });
-            */
+
+
+            // TODO IList<string> stockListName = _userRepository.GetAllAsync().Select(u => u.StockList)
+
 
             IList<Stock> stockList = await _stockRepository.GetAllAsync();
+
+
 
             foreach (Stock stock in stockList)
             {
