@@ -18,8 +18,8 @@ namespace DividendAzureFunction
 
 
 
-        [FunctionName("DividendScraperFunction")]
-        public static async Task Run([TimerTrigger("0 0 10 * * *")]TimerInfo myTimer, ILogger log)
+        [FunctionName("DividendScraperFunction")] // 10 am every week day
+        public static async Task Run([TimerTrigger("0 0 10 * * 1-5")]TimerInfo myTimer, ILogger log)
         {
             //// https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
             //// https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
@@ -27,17 +27,19 @@ namespace DividendAzureFunction
             log.LogInformation($"DividendScraperFunction started at: {DateTime.Now}");
 
 
-            string connectionString = ""; // TODO read config
-            string databaseName = ""; // TODO read config
+            string mongoConnectionString = Environment.GetEnvironmentVariable("MongoConnectionString");
+            string mongoDatabase = Environment.GetEnvironmentVariable("MongoDatabase");
 
-            IDividendRepository dividendRepository = new DividendRepository(connectionString, databaseName);
-            IStockRepository stockRepository = new StockRepository(connectionString, databaseName);
+            IDividendRepository dividendRepository = new DividendRepository(mongoConnectionString, mongoDatabase);
+            IStockRepository stockRepository = new StockRepository(mongoConnectionString, mongoDatabase);
             IList<Stock> stockList = await stockRepository.GetAllAsync();
+
+            DividendListBuilder dividendListBuilder = new DividendListBuilder();
+
 
             foreach (Stock stock in stockList)
             {
-                IEnumerable<Dividend> scrapedList =
-                    await new DividendListBuilder().ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, stock.Name);
+                IEnumerable<Dividend> scrapedList = await dividendListBuilder.ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, stock.Name);
 
                 foreach (Dividend scrapedDividend in scrapedList)
                 {
