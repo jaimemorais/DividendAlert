@@ -18,8 +18,8 @@ namespace DividendAzureFunction
 
 
 
-        [FunctionName("DividendScraperFunction")] // 10 am every week day
-        public static async Task Run([TimerTrigger("0 0 10 * * 1-5")]TimerInfo myTimer, ILogger log)
+        [FunctionName("DividendScraperFunction")] // 19 pm every week day
+        public static async Task Run([TimerTrigger("0 0 19 * * 1-5")]TimerInfo myTimer, ILogger log)
         {
             //// https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
             //// https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
