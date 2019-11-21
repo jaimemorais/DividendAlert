@@ -45,6 +45,7 @@ namespace DividendAzureFunction
                 {
                     if (!(await dividendRepository.GetByStockAsync(scrapedDividend)).Any())
                     {
+                        scrapedDividend.DateAdded = DateTime.Today;
                         await dividendRepository.InsertAsync(scrapedDividend);
                     }
                 }

@@ -22,16 +22,20 @@ namespace DividendAlert.Controllers
     {
         private readonly IMailSender _mailSender;
         private readonly IDividendsHtmlBuilder _dividendsHtmlBuilder;
+        private readonly IDividendListBuilder _dividendListBuilder;
         private readonly IUserRepository _userRepository;
         private readonly IDividendRepository _dividendRepository;
+        private readonly IStockRepository _stockRepository;
 
-        public DividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder,
-            IUserRepository userRepository, IDividendRepository dividendRepository)
+        public DividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder, IDividendListBuilder dividendListBuilder,
+            IUserRepository userRepository, IDividendRepository dividendRepository, IStockRepository stockRepository)
         {
             _mailSender = mailSender;
             _dividendsHtmlBuilder = dividendsHtmlBuilder;
+            _dividendListBuilder = dividendListBuilder;
             _userRepository = userRepository;
             _dividendRepository = dividendRepository;
+            _stockRepository = stockRepository;
         }
 
 
@@ -86,6 +90,43 @@ namespace DividendAlert.Controllers
             return result;
         }
 
+
+
+
+        [HttpGet]
+        [Route("scrape")]
+        public async Task<IActionResult> Scrape()
+        {
+            ////"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
+            ////"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";            
+            const string DIVIDEND_SITE_URI = "https://statusinvest.com.br/acoes/";
+
+            /*
+            await _stockRepository.InsertAsync(new Stock()
+            {
+                Id = new Guid(),
+                Name = "CCRO3"
+            });
+            */
+
+            IList<Stock> stockList = await _stockRepository.GetAllAsync();
+
+            foreach (Stock stock in stockList)
+            {
+                IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, stock.Name);
+
+                foreach (Dividend scrapedDividend in scrapedList)
+                {
+                    if (!(await _dividendRepository.GetByStockAsync(scrapedDividend)).Any())
+                    {
+                        scrapedDividend.DateAdded = DateTime.Today;
+                        await _dividendRepository.InsertAsync(scrapedDividend);
+                    }
+                }
+            }
+
+            return Ok();
+        }
 
     }
 }
