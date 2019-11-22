@@ -115,7 +115,8 @@ namespace DividendAlert.Controllers
 
                 foreach (Dividend scrapedDividend in scrapedList)
                 {
-                    if (!(await _dividendRepository.GetByStockAsync(scrapedDividend)).Any())
+                    if ((DateTime.Parse(scrapedDividend.PaymentDate).Year >= 2019) &&
+                        !(await _dividendRepository.GetByStockAsync(scrapedDividend)).Any())
                     {
                         scrapedDividend.DateAdded = DateTime.Today;
                         await _dividendRepository.InsertAsync(scrapedDividend);
