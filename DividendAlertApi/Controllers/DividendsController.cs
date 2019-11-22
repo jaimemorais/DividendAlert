@@ -1,4 +1,5 @@
 using DividendAlert.Services.Mail;
+using DividendAlertData;
 using DividendAlertData.Model;
 using DividendAlertData.MongoDb;
 using DividendAlertData.Services;
@@ -106,13 +107,11 @@ namespace DividendAlert.Controllers
             // TODO IList<string> stockListName = _userRepository.GetAllAsync().Select(u => u.StockList)
 
 
-            IList<Stock> stockList = await _stockRepository.GetAllAsync();
+            string[] stockList = StockList.STOCK_LIST.Split();
 
-
-
-            foreach (Stock stock in stockList)
+            foreach (string stock in stockList)
             {
-                IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, stock.Name);
+                IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, stock);
 
                 foreach (Dividend scrapedDividend in scrapedList)
                 {
