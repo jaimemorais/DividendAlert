@@ -2,6 +2,7 @@ using DividendAlertData.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -11,36 +12,44 @@ namespace DividendAlertData.Services
     {
         public async Task<IEnumerable<Dividend>> ScrapeAndBuildDividendListAsync(string uri, string stockName)
         {
-            IList<Dividend> list = new List<Dividend>();
-
-
-
             using (HttpClient httpClient = new HttpClient())
             {
-                string html = await httpClient.GetStringAsync(uri + stockName);
+                var response = await httpClient.GetAsync(uri + stockName);
 
-                if (!string.IsNullOrEmpty(html))
+                if (response.IsSuccessStatusCode)
                 {
-                    HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
-                    htmlDoc.LoadHtml(html);
-
-                    string json = htmlDoc.GetElementbyId("results").GetAttributeValue("value", "").Replace("&quot;", "\"");
-                    JArray objList = (JArray)JsonConvert.DeserializeObject(json);
-
-                    foreach (JToken obj in objList)
+                    string html = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(html))
                     {
-                        list.Add(new Dividend()
-                        {
-                            StockName = stockName,
-                            ExDate = obj["ed"].ToString(),
-                            PaymentDate = obj["pd"].ToString(),
-                            Type = obj["et"].ToString(),
-                            Value = obj["v"].ToString()
-                        });
+                        return ScrapeHtml(stockName, html);
                     }
                 }
             }
 
+            return Enumerable.Empty<Dividend>();
+        }
+
+        private static IEnumerable<Dividend> ScrapeHtml(string stockName, string html)
+        {
+            IList<Dividend> list = new List<Dividend>();
+
+            HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
+            htmlDoc.LoadHtml(html);
+
+            string json = htmlDoc.GetElementbyId("results").GetAttributeValue("value", "").Replace("&quot;", "\"");
+            JArray objList = (JArray)JsonConvert.DeserializeObject(json);
+
+            foreach (JToken obj in objList)
+            {
+                list.Add(new Dividend()
+                {
+                    StockName = stockName,
+                    ExDate = obj["ed"].ToString(),
+                    PaymentDate = obj["pd"].ToString(),
+                    Type = obj["et"].ToString(),
+                    Value = obj["v"].ToString()
+                });
+            }
 
             return list;
         }
