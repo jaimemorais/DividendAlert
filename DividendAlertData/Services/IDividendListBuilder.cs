@@ -6,6 +6,6 @@ namespace DividendAlertData.Services
 {
     public interface IDividendListBuilder
     {
-        Task<IEnumerable<Dividend>> ScrapeAndBuildDividendListAsync(string uri, string stockName);
+        Task<IEnumerable<Dividend>> ScrapeAndBuildDividendListAsync(string stockName);
     }
 }
