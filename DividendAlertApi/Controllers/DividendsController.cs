@@ -6,6 +6,8 @@ using DividendAlertData.Services;
 using DividendAlertData.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +29,12 @@ namespace DividendAlert.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IDividendRepository _dividendRepository;
         private readonly IStockRepository _stockRepository;
+        private readonly ILogger _logger;
+        private readonly IConfiguration _config;
 
         public DividendsController(IMailSender mailSender, IDividendsHtmlBuilder dividendsHtmlBuilder, IDividendListBuilder dividendListBuilder,
-            IUserRepository userRepository, IDividendRepository dividendRepository, IStockRepository stockRepository)
+            IUserRepository userRepository, IDividendRepository dividendRepository, IStockRepository stockRepository,
+            ILogger logger, IConfiguration configuration)
         {
             _mailSender = mailSender;
             _dividendsHtmlBuilder = dividendsHtmlBuilder;
@@ -37,6 +42,8 @@ namespace DividendAlert.Controllers
             _userRepository = userRepository;
             _dividendRepository = dividendRepository;
             _stockRepository = stockRepository;
+            _logger = logger;
+            _config = configuration;
         }
 
 
@@ -95,23 +102,35 @@ namespace DividendAlert.Controllers
 
 
         [HttpGet]
-        [Route("scrape")]
-        public async Task<IActionResult> Scrape()
+        [Route("scrape/{scrapeToken}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Scrape(string scrapeToken)
         {
+            if (!_config["ScrapeToken"].Equals(scrapeToken))
+            {
+                return Unauthorized();
+            }
+
+
             ////"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
             ////"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";            
             const string DIVIDEND_SITE_URI = "https://statusinvest.com.br/acoes/";
 
 
-
-            // TODO IList<string> stockListName = _userRepository.GetAllAsync().Select(u => u.StockList)
-
-
             string[] stockList = StockList.STOCK_LIST.Split();
 
-            foreach (string stock in stockList)
+
+            // TODO Parallel.ForEach()
+
+            foreach (string stockName in stockList)
             {
-                IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, stock);
+                IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, stockName);
+
+                if (!scrapedList.Any())
+                {
+                    _logger.LogInformation("Could not found any dividends for " + stockName);
+                    continue;
+                }
 
                 foreach (Dividend scrapedDividend in scrapedList)
                 {
