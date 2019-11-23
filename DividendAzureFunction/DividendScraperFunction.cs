@@ -12,10 +12,6 @@ namespace DividendAzureFunction
 {
     public static class DividendScraperFunction
     {
-        ////"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
-        ////"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";            
-        private const string DIVIDEND_SITE_URI = "https://statusinvest.com.br/acoes/";
-
 
 
         [FunctionName("DividendScraperFunction")] // 19 pm every week day
@@ -39,7 +35,7 @@ namespace DividendAzureFunction
 
             foreach (Stock stock in stockList)
             {
-                IEnumerable<Dividend> scrapedList = await dividendListBuilder.ScrapeAndBuildDividendListAsync(DIVIDEND_SITE_URI, stock.Name);
+                IEnumerable<Dividend> scrapedList = await dividendListBuilder.ScrapeAndBuildDividendListAsync(stock.Name);
 
                 foreach (Dividend scrapedDividend in scrapedList)
                 {
