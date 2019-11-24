@@ -1,5 +1,7 @@
 ﻿using DividendAlertData.MongoDb;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace DividendAlertApi.Controllers
 {
@@ -17,6 +19,13 @@ namespace DividendAlertApi.Controllers
         }
 
 
+        [HttpPost]
+        [Route("send")]
+        public async Task<IActionResult> Send()
+        {
+            throw new NotImplementedException();
+
+        }
 
     }
 }
