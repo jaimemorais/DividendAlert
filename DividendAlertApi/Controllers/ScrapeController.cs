@@ -74,7 +74,6 @@ namespace DividendAlert.Controllers
 
         [HttpGet]
         [Route("scrape/{scrapeToken}")]
-        [Produces("text/html")]
         public async Task<IActionResult> Scrape(string scrapeToken)
         {
             if (!_config["ScrapeToken"].Equals(scrapeToken))
@@ -125,6 +124,29 @@ namespace DividendAlert.Controllers
             return Ok();
         }
 
+
+        [HttpGet]
+        [Route("getLastAdded/{scrapeToken}")]
+        [Produces("text/html")]
+        public async Task<IActionResult> GetLastAddedDividends(string scrapeToken)
+        {
+            if (!_config["ScrapeToken"].Equals(scrapeToken))
+            {
+                return Unauthorized();
+            }
+
+            int days = 7;
+            IEnumerable<Dividend> list = await _dividendRepository.GetLastDaysDividends(days);
+            IOrderedEnumerable<Dividend> orderedList = list.ToList().OrderBy(d => d.StockName);
+
+            string html = $"<h3>Last {days} days dividends : </h3></br>";
+            foreach (Dividend d in orderedList)
+            {
+                html += $"<p> {d.StockName} - DateAdded : {d.DateAdded.ToShortDateString()} - Payment Date : {d.PaymentDate} </p>";
+            }
+
+            return Ok(html);
+        }
 
     }
 }

@@ -10,5 +10,7 @@ namespace DividendAlertData.MongoDb
         Task<IEnumerable<Dividend>> GetByStockNameAsync(string stockName);
 
         Task<IEnumerable<Dividend>> GetByStockAsync(Dividend dividend);
+
+        Task<IEnumerable<Dividend>> GetLastDaysDividends(int days);
     }
 }

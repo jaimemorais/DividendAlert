@@ -1,5 +1,6 @@
 ﻿using DividendAlertData.Model;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,6 +38,15 @@ namespace DividendAlertData.MongoDb
 
 
             var result = await collection.FindAsync(combineFilters);
+
+            return result.ToEnumerable();
+        }
+
+        public async Task<IEnumerable<Dividend>> GetLastDaysDividends(int days)
+        {
+            var filter = Builders<Dividend>.Filter.Gte(d => d.DateAdded, DateTime.Now.AddDays(-days));
+
+            var result = await collection.FindAsync(filter);
 
             return result.ToEnumerable();
         }
