@@ -93,7 +93,7 @@ namespace DividendAlert.Controllers
             user.PasswordResetCode = _authService.GenerateResetCode();
             await _userRepository.ReplaceAsync(user);
 
-            _mailSender.SendMail(email, "Your password reset code : " + user.PasswordResetCode);
+            _mailSender.SendMail(email, "DividendAlert - Password reset", "Your password reset code : " + user.PasswordResetCode);
 
             return Ok();
         }

@@ -13,9 +13,8 @@ namespace DividendAlert.Services.Mail
             _config = config;
         }
 
-        public void SendMail(string to, string html)
+        public void SendMail(string to, string subject, string html)
         {
-            var subject = "New Dividend Alert";
             var body = html;
 
             MailMessage mailMsg = new MailMessage();
