@@ -2,6 +2,7 @@
 using DividendAlertData.MongoDb;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DividendAlertApi.Controllers
@@ -27,18 +28,24 @@ namespace DividendAlertApi.Controllers
         public async Task<IActionResult> SendPush()
         {
             IEnumerable<Dividend> lastDayDividends = await _dividendRepository.GetLastDaysDividends(1);
+            var lastDayDividendsStockNameList = lastDayDividends.Select(d => d.StockName).ToList();
+
             IEnumerable<DividendAlertData.Model.User> users = await _userRepository.GetAllAsync();
-
-
 
             Parallel.ForEach(users, (user) =>
             {
+                List<Dividend> dividendsToPush = new List<Dividend>();
                 string[] userStocks = user.StockList.Split(";");
-                //if (userStocks.Any(lastDayDividends)) 
+                foreach (string userStock in userStocks)
                 {
-                    // TODO send push
+                    if (lastDayDividendsStockNameList.Contains(userStock))
+                    {
+                        dividendsToPush.Add(lastDayDividends.First(d => d.StockName == userStock));
+                    }
                 }
 
+                // TODO send push to user
+                string msgPush = "New dividends for " + dividendsToPush.Select(d => d.StockName);
             });
 
 
