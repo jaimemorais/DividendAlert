@@ -36,19 +36,13 @@ namespace DividendAlertApi.Controllers
             {
                 List<Dividend> dividendsToPush = new List<Dividend>();
                 string[] userStocks = user.StockList.Split(";");
-                foreach (string userStock in userStocks)
-                {
-                    if (lastDayDividendsStockNameList.Contains(userStock))
-                    {
-                        dividendsToPush.Add(lastDayDividends.First(d => d.StockName == userStock));
-                    }
-                }
+                dividendsToPush.AddRange(from string userStock in userStocks
+                                         where lastDayDividendsStockNameList.Contains(userStock)
+                                         select lastDayDividends.First(d => d.StockName == userStock));
 
                 // TODO send push to user
                 string msgPush = "New dividends for " + dividendsToPush.Select(d => d.StockName);
             });
-
-
 
 
             return Ok();
