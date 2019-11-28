@@ -1,4 +1,5 @@
-﻿using DividendAlertData.Model;
+﻿using DividendAlertApi.Services.Push;
+using DividendAlertData.Model;
 using DividendAlertData.MongoDb;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -14,12 +15,14 @@ namespace DividendAlertApi.Controllers
 
         private readonly IDividendRepository _dividendRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IPushService _pushService;
 
 
-        public PushController(IDividendRepository dividendRepository, IUserRepository userRepository)
+        public PushController(IDividendRepository dividendRepository, IUserRepository userRepository, IPushService pushService)
         {
             _dividendRepository = dividendRepository;
             _userRepository = userRepository;
+            _pushService = pushService;
         }
 
 
@@ -42,6 +45,8 @@ namespace DividendAlertApi.Controllers
 
                 // TODO send push to user
                 string msgPush = "New dividends for " + dividendsToPush.Select(d => d.StockName);
+
+                // _pushService.Send
             });
 
 

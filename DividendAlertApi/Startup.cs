@@ -2,6 +2,7 @@
 using DividendAlert.Services.Auth;
 using DividendAlert.Services.Mail;
 using DividendAlertApi.Middlewares;
+using DividendAlertApi.Services.Push;
 using DividendAlertData.MongoDb;
 using DividendAlertData.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -39,6 +40,7 @@ namespace DividendAlert
 
             services.AddScoped<IMailSender, MailSender>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IPushService, PushService>();
             services.AddScoped<IDividendsHtmlBuilder, DividendsHtmlBuilder>();
             services.AddScoped<IDividendListBuilder, DividendListBuilder>();
 
