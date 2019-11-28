@@ -33,14 +33,9 @@ namespace DividendAlertApi.Services.Push
             {
                 result = await client.SendAsync(request);
 
-                if (result.IsSuccessStatusCode)
+                if (!result.IsSuccessStatusCode)
                 {
-                    // "Push sent OK.";
-                }
-                else
-                {
-                    // TODO
-                    // "Error sending Push. Firebase Cloud Messaging HttpStatusCode : " + (int)result.StatusCode;
+                    throw new System.Exception("Error sending push : " + result.StatusCode);
                 }
             }
         }
