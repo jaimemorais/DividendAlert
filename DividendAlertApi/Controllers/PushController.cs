@@ -1,13 +1,16 @@
 ﻿using DividendAlertApi.Services.Push;
 using DividendAlertData.Model;
 using DividendAlertData.MongoDb;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DividendAlertApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PushController : ControllerBase
@@ -26,6 +29,7 @@ namespace DividendAlertApi.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("sendPush")]
         public async Task<IActionResult> SendPush()
@@ -43,8 +47,6 @@ namespace DividendAlertApi.Controllers
                                          where lastDayDividendsStockNameList.Contains(userStock)
                                          select lastDayDividends.First(d => d.StockName == userStock));
 
-                // TODO configure firebase
-
                 string pushBody = "New dividends for " + dividendsToPush.Select(d => d.StockName);
                 await _pushService.SendPushAsync(user.FirebaseCloudMessagingToken, "New Dividend!", pushBody);
             });
@@ -52,6 +54,21 @@ namespace DividendAlertApi.Controllers
 
             return Ok();
         }
+
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateUserFcmTokenAsync(string userFcmToken)
+        {
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            User user = await _userRepository.GetByEmailAsync(claims.FindFirst("Email").Value);
+
+            user.FirebaseCloudMessagingToken = userFcmToken;
+
+            await _userRepository.ReplaceAsync(user);
+
+            return Ok();
+        }
+
 
     }
 }
