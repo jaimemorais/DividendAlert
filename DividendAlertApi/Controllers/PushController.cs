@@ -35,7 +35,7 @@ namespace DividendAlertApi.Controllers
 
             IEnumerable<DividendAlertData.Model.User> users = await _userRepository.GetAllAsync();
 
-            Parallel.ForEach(users, (user) =>
+            Parallel.ForEach(users, async (user) =>
             {
                 List<Dividend> dividendsToPush = new List<Dividend>();
                 string[] userStocks = user.StockList.Split(";");
@@ -43,10 +43,10 @@ namespace DividendAlertApi.Controllers
                                          where lastDayDividendsStockNameList.Contains(userStock)
                                          select lastDayDividends.First(d => d.StockName == userStock));
 
-                // TODO send push to user
-                string msgPush = "New dividends for " + dividendsToPush.Select(d => d.StockName);
+                // TODO configure firebase
 
-                // _pushService.Send
+                string pushBody = "New dividends for " + dividendsToPush.Select(d => d.StockName);
+                await _pushService.SendPushAsync(user.FirebaseCloudMessagingToken, "New Dividend!", pushBody);
             });
 
 

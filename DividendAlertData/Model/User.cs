@@ -14,6 +14,8 @@ namespace DividendAlertData.Model
 
         public string StockList { get; set; }
 
+        public string FirebaseCloudMessagingToken { get; set; }
+
     }
 
 }
