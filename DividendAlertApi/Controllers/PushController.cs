@@ -3,6 +3,7 @@ using DividendAlertData.Model;
 using DividendAlertData.MongoDb;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -19,21 +20,27 @@ namespace DividendAlertApi.Controllers
         private readonly IDividendRepository _dividendRepository;
         private readonly IUserRepository _userRepository;
         private readonly IPushService _pushService;
+        private readonly IConfiguration _config;
 
-
-        public PushController(IDividendRepository dividendRepository, IUserRepository userRepository, IPushService pushService)
+        public PushController(IDividendRepository dividendRepository, IUserRepository userRepository, IPushService pushService, IConfiguration config)
         {
             _dividendRepository = dividendRepository;
             _userRepository = userRepository;
             _pushService = pushService;
+            _config = config;
         }
 
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("sendPush")]
-        public async Task<IActionResult> SendPush()
+        [Route("sendPush/{sendPushToken}")]
+        public async Task<IActionResult> SendPush(string sendPushToken)
         {
+            if (!_config["SendPushToken"].Equals(sendPushToken))
+            {
+                return Unauthorized();
+            }
+
             IEnumerable<Dividend> lastDayDividends = await _dividendRepository.GetLastDaysDividends(1);
             var lastDayDividendsStockNameList = lastDayDividends.Select(d => d.StockName).ToList();
 
