@@ -26,21 +26,16 @@ namespace DividendAlertApi.Services.Push
 
 
             var request = new HttpRequestMessage(HttpMethod.Post, FIREBASE_CLOUD_MESSAGING_SEND_URI);
-            request.Headers.TryAddWithoutValidation("Authorization", "key=" + _config["FIREBASE_CLOUD_MESSAGING_KEY"]);
+            request.Headers.TryAddWithoutValidation("Authorization", "key=" + _config["FirebaseCloudMessagingKey"]);
             request.Content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
             HttpResponseMessage result;
             using (var client = new HttpClient())
             {
                 result = await client.SendAsync(request);
 
-                if (result.IsSuccessStatusCode)
+                if (!result.IsSuccessStatusCode)
                 {
-                    // "Push sent OK.";
-                }
-                else
-                {
-                    // TODO
-                    // "Error sending Push. Firebase Cloud Messaging HttpStatusCode : " + (int)result.StatusCode;
+                    throw new System.Exception("Error sending push : " + result.StatusCode);
                 }
             }
         }
