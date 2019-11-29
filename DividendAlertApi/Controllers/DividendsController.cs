@@ -30,9 +30,9 @@ namespace DividendAlert.Controllers
 
 
         [HttpGet]
-        [Route("lastMonth")]
+        [Route("lastDays/{days}")]
         [Produces("application/json")]
-        public async Task<IEnumerable<Dividend>> GetLastMonthDividends()
+        public async Task<IEnumerable<Dividend>> GetLastDividends(int days)
         {
             var claims = HttpContext.User.Identity as ClaimsIdentity;
             User user = await _userRepository.GetByEmailAsync(claims.FindFirst("Email").Value);
@@ -43,7 +43,7 @@ namespace DividendAlert.Controllers
             foreach (string stockName in stockList)
             {
                 var dividendList = await _dividendRepository.GetByStockNameAsync(stockName);
-                var lastMonth = dividendList.Where(d => d.DateAdded.AddMonths(-1) >= DateTime.Now);
+                var lastMonth = dividendList.Where(d => d.DateAdded.AddDays(-days) >= DateTime.Now);
                 result.AddRange(lastMonth);
             }
 
