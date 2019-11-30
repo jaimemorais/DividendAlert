@@ -134,16 +134,15 @@ namespace DividendAlert.Controllers
 
 
         [HttpGet]
-        [Route("getLastAdded/{scrapeToken}")]
+        [Route("lastAdded/{scrapeToken}/{days}")]
         [Produces("text/html")]
-        public async Task<IActionResult> GetLastAddedDividends(string scrapeToken)
+        public async Task<IActionResult> GetLastAddedDividends(string scrapeToken, int days)
         {
             if (!_config["ScrapeToken"].Equals(scrapeToken))
             {
                 return Unauthorized();
             }
 
-            int days = 7;
             IEnumerable<Dividend> list = await _dividendRepository.GetLastDaysDividends(days);
             IOrderedEnumerable<Dividend> orderedList = list.ToList().OrderBy(d => d.StockName);
 
