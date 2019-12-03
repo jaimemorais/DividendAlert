@@ -110,13 +110,20 @@ namespace DividendAlert.Controllers
                     {
                         Parallel.ForEach(scrapedList, async (scrapedDividend) =>
                         {
-                            if (DateTime.TryParseExact(scrapedDividend.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime paymentDate) &&
-                                (paymentDate.Year >= 2019) &&
-                                !(await _dividendRepository.GetByStockAsync(scrapedDividend)).Any())
+                            bool paymentUndefined = string.IsNullOrEmpty(scrapedDividend.PaymentDate);
+
+                            bool paymentOnAndBeyond2019 =
+                                (!paymentUndefined) &&
+                                (DateTime.TryParseExact(scrapedDividend.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime paymentDate)) &&
+                                (paymentDate.Year >= 2019);
+
+                            bool alreadyAdded = (await _dividendRepository.GetByStockAsync(scrapedDividend)).Any();
+
+                            if ((paymentUndefined || paymentOnAndBeyond2019) && !alreadyAdded)
                             {
                                 scrapedDividend.DateAdded = DateTime.Today;
                                 await _dividendRepository.InsertAsync(scrapedDividend);
-                                _logger.LogInformation($"New dividend for {stockName} added. Payment Date = {paymentDate.ToShortDateString()}");
+                                _logger.LogInformation($"New dividend for {stockName} added. Payment Date = {scrapedDividend.PaymentDate}");
                             }
                         });
                     }
