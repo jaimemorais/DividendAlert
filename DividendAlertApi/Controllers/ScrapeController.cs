@@ -99,7 +99,7 @@ namespace DividendAlert.Controllers
 
 
                 IList<Stock> stockDbList = await _stockRepository.GetAllAsync();
-                string[] stockList = stockDbList.Select(s => s.Name).ToArray();
+                string[] stockList = stockDbList.Select(s => s.Name).ToArray(); //new string[] { "EGIE3" };
 
                 // Fire and forget
                 Parallel.ForEach(stockList, async (stockName) =>
@@ -110,16 +110,13 @@ namespace DividendAlert.Controllers
                     {
                         Parallel.ForEach(scrapedList, async (scrapedDividend) =>
                         {
-                            bool paymentUndefined = string.IsNullOrEmpty(scrapedDividend.PaymentDate);
+                            bool paymentUndefined = !(DateTime.TryParseExact(scrapedDividend.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime paymentDate));
 
-                            bool paymentOnAndBeyond2019 =
-                                (!paymentUndefined) &&
-                                (DateTime.TryParseExact(scrapedDividend.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime paymentDate)) &&
-                                (paymentDate.Year >= 2019);
+                            bool paymentOnAndBeyond2019 = paymentDate.Year >= 2019;
 
                             bool alreadyAdded = (await _dividendRepository.GetByStockAsync(scrapedDividend)).Any();
 
-                            if ((paymentUndefined || paymentOnAndBeyond2019) && !alreadyAdded)
+                            if (!paymentUndefined && paymentOnAndBeyond2019 && !alreadyAdded)
                             {
                                 scrapedDividend.DateAdded = DateTime.Today;
                                 await _dividendRepository.InsertAsync(scrapedDividend);
