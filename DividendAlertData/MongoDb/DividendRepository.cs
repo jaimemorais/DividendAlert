@@ -20,7 +20,7 @@ namespace DividendAlertData.MongoDb
 
             var result = await collection.FindAsync(filter);
 
-            return await result.ToListAsync();
+            return result.ToEnumerable();
         }
 
         public async Task<IEnumerable<Dividend>> GetByStockAsync(Dividend dividend)
@@ -39,7 +39,7 @@ namespace DividendAlertData.MongoDb
 
             var result = await collection.FindAsync(combineFilters);
 
-            return await result.ToListAsync();
+            return result.ToEnumerable();
         }
 
         public async Task<IEnumerable<Dividend>> GetLastDaysDividends(int days)
@@ -48,7 +48,7 @@ namespace DividendAlertData.MongoDb
 
             var result = await collection.FindAsync(filter);
 
-            return await result.ToListAsync();
+            return result.ToEnumerable();
         }
 
     }
