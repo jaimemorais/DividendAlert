@@ -156,6 +156,7 @@ namespace DividendAlert.Controllers
             {
                 html += $"<p> {d.StockName} - " +
                     $"DateAdded : {d.DateAdded.ToShortDateString()} - " +
+                    $"Type : {d.Type} - " +
                     $"Payment Date : {d.PaymentDate} - " +
                     $"Value : {d.Value} " +
                     $"</p>";
