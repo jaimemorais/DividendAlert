@@ -154,7 +154,11 @@ namespace DividendAlert.Controllers
             string html = $"<h3>Last {days} days dividends : </h3></br>";
             foreach (Dividend d in orderedList)
             {
-                html += $"<p> {d.StockName} - DateAdded : {d.DateAdded.ToShortDateString()} - Payment Date : {d.PaymentDate} </p>";
+                html += $"<p> {d.StockName} - " +
+                    $"DateAdded : {d.DateAdded.ToShortDateString()} - " +
+                    $"Payment Date : {d.PaymentDate} - " +
+                    $"Value : {d.Value} " +
+                    $"</p>";
             }
 
             return Ok(html);
