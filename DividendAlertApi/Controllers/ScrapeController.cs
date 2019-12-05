@@ -149,7 +149,7 @@ namespace DividendAlert.Controllers
             }
 
             IEnumerable<Dividend> list = await _dividendRepository.GetLastDaysDividends(days);
-            IOrderedEnumerable<Dividend> orderedList = list.ToList().OrderBy(d => d.StockName);
+            IOrderedEnumerable<Dividend> orderedList = list.ToList().OrderByDescending(d => d.DateAdded);
 
             string html = $"<h3>Last {days} days dividends : </h3></br>";
             foreach (Dividend d in orderedList)
