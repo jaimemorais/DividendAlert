@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -88,21 +89,30 @@ namespace DividendAlert.Controllers
             {
                 return NotFound();
             }
-            /*TODO
+
             string[] stockList = user.StockList.Split(";");
 
-            List<Dividend> lastDaysDividendList = new List<Dividend>();
+            List<Dividend> nextDividendList = new List<Dividend>();
+
+            DateTime param = new DateTime(year, month, day);
 
             foreach (string stockName in stockList)
             {
                 var dividendList = await _dividendRepository.GetByStockNameAsync(stockName);
 
-                lastDaysDividendList.AddRange(dividendList.Where(d => d.PaymentDate >= DateTime.Now.AddDays(-days)));
+                foreach (Dividend d in dividendList)
+                {
+                    DateTime.TryParseExact(d.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime paymentDate);
+
+                    if (d.PaymentDate.CompareTo(param) > 0)
+                    {
+                        nextDividendList.Add(d);
+                    }
+                }
             }
-            
-            return lastDaysDividendList;
-            */
-            return null;
+
+            return nextDividendList;
+
         }
     }
 }
