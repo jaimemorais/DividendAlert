@@ -102,9 +102,9 @@ namespace DividendAlert.Controllers
 
                 foreach (Dividend d in dividendList)
                 {
-                    DateTime.TryParseExact(d.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime paymentDate);
+                    bool parseOk = DateTime.TryParseExact(d.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime paymentDate);
 
-                    if (d.PaymentDate.CompareTo(param) > 0)
+                    if (parseOk && paymentDate.CompareTo(param) > 0)
                     {
                         nextDividendList.Add(d);
                     }
