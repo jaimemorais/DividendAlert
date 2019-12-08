@@ -70,9 +70,9 @@ namespace DividendAlert.Controllers
 
         [AllowAnonymous] // TODO remove
         [HttpGet]
-        [Route("next/{scrapeToken}/{days}")]
+        [Route("next/{scrapeToken}/{year}/{month}/{day}")]
         [Produces("application/json")]
-        public async Task<ActionResult<IEnumerable<Dividend>>> GetNextDividends(string scrapeToken)
+        public async Task<ActionResult<IEnumerable<Dividend>>> GetNextDividends(string scrapeToken, int year, int month, int day)
         {
             // TODO remove
             if (!_config["ScrapeToken"].Equals(scrapeToken))
