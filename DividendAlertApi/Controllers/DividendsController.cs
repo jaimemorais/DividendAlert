@@ -68,6 +68,41 @@ namespace DividendAlert.Controllers
         }
 
 
+        [AllowAnonymous] // TODO remove
+        [HttpGet]
+        [Route("next/{scrapeToken}/{days}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<IEnumerable<Dividend>>> GetNextDividends(string scrapeToken)
+        {
+            // TODO remove
+            if (!_config["ScrapeToken"].Equals(scrapeToken))
+            {
+                return Unauthorized();
+            }
 
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            claims.AddClaim(new Claim("Email", "jaime@teste.com")); // TODO remove
+            User user = await _userRepository.GetByEmailAsync(claims.FindFirst("Email").Value);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            /*TODO
+            string[] stockList = user.StockList.Split(";");
+
+            List<Dividend> lastDaysDividendList = new List<Dividend>();
+
+            foreach (string stockName in stockList)
+            {
+                var dividendList = await _dividendRepository.GetByStockNameAsync(stockName);
+
+                lastDaysDividendList.AddRange(dividendList.Where(d => d.PaymentDate >= DateTime.Now.AddDays(-days)));
+            }
+            
+            return lastDaysDividendList;
+            */
+            return null;
+        }
     }
 }
