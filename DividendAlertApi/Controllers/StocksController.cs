@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DividendAlertApi.Controllers
@@ -26,11 +25,11 @@ namespace DividendAlertApi.Controllers
         [HttpGet]
         [Route("stockList")]
         [Produces("application/json")]
-        public async Task<IEnumerable<string>> GetStockList()
+        public async Task<IEnumerable<Stock>> GetStockList()
         {
             IList<Stock> lista = await _stockRepository.GetAllAsync();
 
-            return lista.Select(s => s.Name).ToList();
+            return lista;
         }
 
     }
