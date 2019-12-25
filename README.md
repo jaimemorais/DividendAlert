@@ -1,4 +1,4 @@
 # DividendAlert
 Alert for new dividends
 
-asp.net core , docker , azure , angular , azure functions
+Asp.net core / Angular / Docker / Azure Functions
