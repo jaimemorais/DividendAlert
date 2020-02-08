@@ -110,19 +110,7 @@ namespace DividendAlert.Controllers
                     {
                         Parallel.ForEach(scrapedList, async (scrapedDividend) =>
                         {
-                            bool paymentUndefined = !(DateTime.TryParseExact(scrapedDividend.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime paymentDate));
-
-                            if (!paymentUndefined && paymentDate.Year >= 2019)
-                            {
-                                bool alreadyAdded = (await _dividendRepository.GetByStockAsync(scrapedDividend)).Any();
-
-                                if (!alreadyAdded)
-                                {
-                                    scrapedDividend.DateAdded = DateTime.Today;
-                                    await _dividendRepository.InsertAsync(scrapedDividend);
-                                    _logger.LogInformation($"New dividend for {stockName} added. Payment Date = {scrapedDividend.PaymentDate}");
-                                }
-                            }
+                            await CheckAndInsertDividendAsync(stockName, scrapedDividend);
                         });
                     }
                 });
@@ -134,6 +122,24 @@ namespace DividendAlert.Controllers
             {
                 _mailSender.SendMail("jaimemorais@gmail.com", "Dividend Alert Scraping Error", ex.ToString());
                 return StatusCode(500);
+            }
+        }
+
+
+        private async Task CheckAndInsertDividendAsync(string stockName, Dividend scrapedDividend)
+        {
+            bool paymentUndefined = !(DateTime.TryParseExact(scrapedDividend.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime paymentDate));
+
+            if (!paymentUndefined && paymentDate.Year >= 2019)
+            {
+                bool alreadyAdded = (await _dividendRepository.GetByStockAsync(scrapedDividend)).Any();
+
+                if (!alreadyAdded)
+                {
+                    scrapedDividend.DateAdded = DateTime.Today;
+                    await _dividendRepository.InsertAsync(scrapedDividend);
+                    _logger.LogInformation($"New dividend for {stockName} added. Payment Date = {scrapedDividend.PaymentDate}");
+                }
             }
         }
 
