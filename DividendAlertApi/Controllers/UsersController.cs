@@ -46,7 +46,7 @@ namespace DividendAlert.Controllers
             {
                 Id = Guid.NewGuid(),
                 Email = email,
-                Password = pwd
+                Password = _authService.GeneratePwdHash(pwd)
             };
 
             await _userRepository.InsertAsync(user);
