@@ -59,8 +59,7 @@ namespace DividendAlert.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromForm]string email, [FromForm]string pwd)
         {
-            if (string.IsNullOrWhiteSpace(email) ||
-                string.IsNullOrWhiteSpace(pwd))
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(pwd))
             {
                 return BadRequest("Email and Password are required.");
             }
