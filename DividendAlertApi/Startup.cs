@@ -31,12 +31,29 @@ namespace DividendAlert
 
 
 
+        public const string DIVIDEND_ALERT_CORS_ORIGINS_KEY = "DividendAlertCorsOrigins";
+
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(DIVIDEND_ALERT_CORS_ORIGINS_KEY,
+                    builder =>
+                    {
+                        builder
+                            .WithOrigins(_config[DIVIDEND_ALERT_CORS_ORIGINS_KEY].Split(';'))
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
+
+
             services.AddMvc(options => options.OutputFormatters.Add(new HtmlOutputFormatter()));
+            
             services.AddControllers();
 
-            services.AddCors();
 
             services.AddScoped<IMailSender, MailSender>();
             services.AddScoped<IAuthService, AuthService>();
@@ -103,23 +120,19 @@ namespace DividendAlert
             }
 
 
-            // TODO : define prod options
-            app.UseCors(option =>
-                option
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod());
-
-
 
             app.UseRouting();
+
+            app.UseCors(DIVIDEND_ALERT_CORS_ORIGINS_KEY);
 
             app.UseAuthorization();
             app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints
+                    .MapControllers()
+                    .RequireCors(DIVIDEND_ALERT_CORS_ORIGINS_KEY);
             });
 
 
