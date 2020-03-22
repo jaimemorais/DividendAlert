@@ -161,7 +161,7 @@ namespace DividendAlert.Controllers
                 }
 
 
-                return Ok();
+                return Ok("Scrape completed without errors.");
             }
             catch (Exception ex)
             {
