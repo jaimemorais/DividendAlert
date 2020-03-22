@@ -1,3 +1,4 @@
+using Dasync.Collections;
 using DividendAlert.Services.Mail;
 using DividendAlertData.Model;
 using DividendAlertData.MongoDb;
@@ -99,21 +100,65 @@ namespace DividendAlert.Controllers
 
 
                 IList<Stock> stockDbList = await _stockRepository.GetAllAsync();
-                string[] stockList = stockDbList.Select(s => s.Name).ToArray(); //new string[] { "EGIE3" };
+                
+                string[] stockList = stockDbList.Select(s => s.Name).ToArray();
+                // To debug just one stock 
+                ////stockList = new string[] { "ESTC3" };
+
+                string errors = null;
+
+
+                await stockList.ParallelForEachAsync(
+                    async stockName =>
+                    {
+                        try
+                        {
+                            IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(stockName);
+
+                            if (scrapedList.Any())
+                            {
+                                Parallel.ForEach(scrapedList, async (scrapedDividend) =>
+                                {
+                                    await CheckAndInsertDividendAsync(stockName, scrapedDividend);
+                                });
+                            }
+                        }
+                        catch (Exception scrapeEx)
+                        {
+                            errors += $"Error scraping {stockName} : {scrapeEx.Message}; ";
+                        }
+                    }
+                );
+
+
 
                 // Fire and forget
-                Parallel.ForEach(stockList, async (stockName) =>
+                /*Parallel.ForEach(stockList, async (stockName) =>
                 {
-                    IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(stockName);
-
-                    if (scrapedList.Any())
+                    try
                     {
-                        Parallel.ForEach(scrapedList, async (scrapedDividend) =>
+                        IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(stockName);
+
+                        if (scrapedList.Any())
                         {
-                            await CheckAndInsertDividendAsync(stockName, scrapedDividend);
-                        });
+                            Parallel.ForEach(scrapedList, async (scrapedDividend) =>
+                            {
+                                await CheckAndInsertDividendAsync(stockName, scrapedDividend);
+                            });
+                        }
                     }
-                });
+                    catch (Exception scrapeEx)
+                    {
+                        errors += $"Error scraping {stockName} : {scrapeEx.Message}; ";
+                    }
+                });*/
+
+
+                if (errors != null)
+                {
+                    _mailSender.SendMail("jaimemorais@gmail.com", $"Dividend Alert Scraping Errors {DateTime.Now}", errors);
+                    return StatusCode(500);
+                }
 
 
                 return Ok();
