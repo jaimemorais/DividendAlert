@@ -12,17 +12,12 @@ namespace DividendAlertData.Services
     {
 
 
-        ////"https://www.bussoladoinvestidor.com.br/guia-empresas/empresa/CCRO3/proventos"
-        ////"http://fundamentus.com.br/proventos.php?papel=ABEV3&tipo=2";            
-        const string DIVIDEND_SITE_URI = "https://statusinvest.com.br/acoes/";
 
-
-
-        public async Task<IEnumerable<Dividend>> ScrapeAndBuildDividendListAsync(string stockName)
+        public async Task<IEnumerable<Dividend>> ScrapeAndBuildDividendListAsync(string dividendSiteToScrape, string stockName)
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                var response = await httpClient.GetAsync(DIVIDEND_SITE_URI + stockName);
+                var response = await httpClient.GetAsync(dividendSiteToScrape + stockName);
 
                 if (response.IsSuccessStatusCode)
                 {

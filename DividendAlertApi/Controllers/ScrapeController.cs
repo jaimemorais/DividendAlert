@@ -52,6 +52,7 @@ namespace DividendAlert.Controllers
         [Produces("text/html")]
         public async Task<IActionResult> GetHtmlAsync(string scrapeToken)
         {
+            // TODO better auth
             if (!_config["ScrapeToken"].Equals(scrapeToken))
             {
                 return Unauthorized();
@@ -77,6 +78,7 @@ namespace DividendAlert.Controllers
         [Route("scrape/{scrapeToken}")]
         public async Task<IActionResult> Scrape(string scrapeToken)
         {
+            // TODO better auth
             if (!_config["ScrapeToken"].Equals(scrapeToken))
             {
                 return Unauthorized();
@@ -100,7 +102,7 @@ namespace DividendAlert.Controllers
                     {
                         try
                         {
-                            IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(stockName);
+                            IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(_config["DividendSiteToScrape"], stockName);
 
                             if (scrapedList.Any())
                             {
@@ -158,6 +160,7 @@ namespace DividendAlert.Controllers
         [Produces("text/html")]
         public async Task<IActionResult> GetLastAddedDividends(string scrapeToken, int days)
         {
+            // TODO better auth
             if (!_config["ScrapeToken"].Equals(scrapeToken))
             {
                 return Unauthorized();

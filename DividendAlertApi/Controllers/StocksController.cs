@@ -31,6 +31,7 @@ namespace DividendAlertApi.Controllers
         [Route("createStockDocuments/{scrapeToken}")]
         public async Task<IActionResult> CreateStockDocuments(string scrapeToken)
         {
+            // TODO better auth
             if (!_config["ScrapeToken"].Equals(scrapeToken))
             {
                 return Unauthorized();

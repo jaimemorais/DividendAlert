@@ -35,7 +35,8 @@ namespace DividendAzureFunction
 
             foreach (Stock stock in stockList)
             {
-                IEnumerable<Dividend> scrapedList = await dividendListBuilder.ScrapeAndBuildDividendListAsync(stock.Name);
+                IEnumerable<Dividend> scrapedList = 
+                    await dividendListBuilder.ScrapeAndBuildDividendListAsync(Environment.GetEnvironmentVariable("DividendSiteToScrape"), stock.Name);
 
                 foreach (Dividend scrapedDividend in scrapedList)
                 {
