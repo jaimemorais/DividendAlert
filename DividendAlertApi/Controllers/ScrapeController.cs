@@ -74,6 +74,8 @@ namespace DividendAlert.Controllers
         }
 
 
+
+        // TODO migrate to Azure AppService Webjobs https://docs.microsoft.com/en-us/azure/app-service/webjobs-create
         [HttpGet]
         [Route("scrape/{scrapeToken}")]
         public async Task<IActionResult> Scrape(string scrapeToken)
