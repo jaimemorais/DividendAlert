@@ -1,4 +1,3 @@
 # DividendAlert
-Alert for new dividends
-
-Asp.net core / Angular / Docker / Azure Functions
+Alert for new dividends - backend
+Asp.net core API / JWT / Docker / Azure Functions
