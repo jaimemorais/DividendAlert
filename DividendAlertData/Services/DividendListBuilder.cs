@@ -1,6 +1,6 @@
 using DividendAlertData.Model;
+using HtmlAgilityPack;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -39,13 +39,36 @@ namespace DividendAlertData.Services
             HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
             htmlDoc.LoadHtml(html);
 
-            var results = htmlDoc.GetElementbyId("results");
-
-            if (results != null)
+            HtmlDocument htmlDocEvents = new HtmlDocument();
+            string divHtml = GetHtmlFirstDivByClass(htmlDoc, "event-list w-100");
+            if (divHtml == null)
             {
-                string json = results.GetAttributeValue("value", "").Replace("&quot;", "\"");
-                JArray objList = (JArray)JsonConvert.DeserializeObject(json);
+                return list;
+            }
+            htmlDocEvents.LoadHtml(divHtml);
 
+            
+            var input = htmlDocEvents.DocumentNode.SelectNodes("//input");
+                        
+            if (input != null)
+            {
+                string json = input[0].GetAttributeValue("value", "").Replace("&quot;", "\"");
+                
+                Stock stock = JsonConvert.DeserializeObject<Stock>(json); 
+
+                foreach (Provent provent in stock.Provents)
+                {
+                    list.Add(new Dividend()
+                    {
+                        StockName = provent.code,
+                        ExDate = provent.dateCom,
+                        PaymentDate = provent.date,
+                        Type = provent.typeDesc,
+                        Value = provent.resultAbsoluteValue
+                    });
+                }
+
+                /*JArray objList = (JArray)JsonConvert.DeserializeObject(json);
                 foreach (JToken obj in objList)
                 {
                     list.Add(new Dividend()
@@ -56,10 +79,21 @@ namespace DividendAlertData.Services
                         Type = obj["et"].ToString(),
                         Value = obj["v"].ToString()
                     });
-                }
+                }*/
             }
 
             return list;
+        }
+
+        private static string GetHtmlFirstDivByClass(HtmlDocument htmlDoc, string classToGet)
+        {
+            HtmlNodeCollection divs = htmlDoc.DocumentNode.SelectNodes("//div[@class='" + classToGet + "']");
+            if (divs != null && divs.Count > 0)
+            {
+                return divs[0].OuterHtml;
+            }
+
+            return null;
         }
     }
 

@@ -28,12 +28,12 @@ namespace DividendAzureFunction
 
             IDividendRepository dividendRepository = new DividendRepository(mongoConnectionString, mongoDatabase);
             IStockRepository stockRepository = new StockRepository(mongoConnectionString, mongoDatabase);
-            IList<Stock> stockList = await stockRepository.GetAllAsync();
+            IList<DividendAlertData.Model.Stock> stockList = await stockRepository.GetAllAsync();
 
             DividendListBuilder dividendListBuilder = new DividendListBuilder();
 
 
-            foreach (Stock stock in stockList)
+            foreach (DividendAlertData.Model.Stock stock in stockList)
             {
                 IEnumerable<Dividend> scrapedList = 
                     await dividendListBuilder.ScrapeAndBuildDividendListAsync(Environment.GetEnvironmentVariable("DividendSiteToScrape"), stock.Name);

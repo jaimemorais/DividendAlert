@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -90,11 +91,12 @@ namespace DividendAlert.Controllers
             {
                 _logger.LogInformation("Scraping started at " + DateTime.Now.ToString());
 
-                IList<Stock> stockDbList = await _stockRepository.GetAllAsync();
+                IList<DividendAlertData.Model.Stock> stockDbList = await _stockRepository.GetAllAsync();
                 
                 string[] stockList = stockDbList.Select(s => s.Name).ToArray();
+
                 // To debug just one stock 
-                ////stockList = new string[] { "ESTC3" };
+                ////stockList = new string[] { "ITSA3" };
 
                 string errors = null;
 
@@ -104,12 +106,14 @@ namespace DividendAlert.Controllers
                     {
                         try
                         {
+                            Debug.WriteLine("Scraping " + stockName + " ...");
                             IEnumerable<Dividend> scrapedList = await _dividendListBuilder.ScrapeAndBuildDividendListAsync(_config["DividendSiteToScrape"], stockName);
 
                             if (scrapedList.Any())
                             {
                                 Parallel.ForEach(scrapedList, async (scrapedDividend) =>
                                 {
+                                    
                                     await CheckAndInsertDividendAsync(stockName, scrapedDividend);
                                 });
                             }
