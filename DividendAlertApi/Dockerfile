@@ -1,19 +1,22 @@
-FROM microsoft/dotnet:3.0-aspnetcore-runtime AS base
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM microsoft/aspnetcore-build:3.0 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
-COPY ["DividendAlert/DividendAlert.csproj", "DividendAlert/"]
-RUN dotnet restore "DividendAlert/DividendAlert.csproj"
+COPY ["DividendAlertApi/DividendAlertApi.csproj", "DividendAlertApi/"]
+COPY ["DividendAlertData/DividendAlertData.csproj", "DividendAlertData/"]
+RUN dotnet restore "DividendAlertApi/DividendAlertApi.csproj"
 COPY . .
-WORKDIR "/src/DividendAlert"
-RUN dotnet build "DividendAlert.csproj" -c Release -o /app
+WORKDIR "/src/DividendAlertApi"
+RUN dotnet build "DividendAlertApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "DividendAlert.csproj" -c Release -o /app
+RUN dotnet publish "DividendAlertApi.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "DividendAlert.dll"]
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "DividendAlertApi.dll"]
