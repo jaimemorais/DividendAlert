@@ -60,7 +60,7 @@ namespace DividendAlert.Controllers
             }
 
 
-            string[] stockList = "ABEV3;BBSE3;CCRO3;EGIE3;FLRY3;HGTX3;ITSA3;ITSA4;RADL3;WEGE3".Split(";");
+            string[] stockList = "ABEV3;BBSE3;CCRO3;EGIE3;FLRY3;VIVT3;ITSA3;ITSA4;RADL3;WEGE3".Split(";");
 
             string html = await _dividendsHtmlBuilder.GenerateHtmlAsync(stockList);
 
