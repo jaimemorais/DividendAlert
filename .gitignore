@@ -38,3 +38,5 @@ frontend/DividendAlertApp/src/environments/environment.ts
 /DividendScraperService/obj
 /DividendScraperService/Properties/launchSettings.json
 /DividendScraperService/appsettings.Development.json
+/DividendAlertApi/bin
+/DividendAlertApi/Properties/ServiceDependencies/DividendAlertApi - Azure - Web Deploy/profile.arm.json
