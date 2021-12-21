@@ -60,7 +60,7 @@ namespace DividendAlert.Controllers
             }
 
 
-            string[] stockList = "ABEV3;BBSE3;CCRO3;EGIE3;FLRY3;VIVT3;ITSA3;ITSA4;RADL3;WEGE3".Split(";");
+            string[] stockList = "ABEV3;BBSE3;CCRO3;EGIE3;FLRY3;VIVT3;ITSA3;ITSA4;PETZ3;RADL3;WEGE3".Split(";");
 
             string html = await _dividendsHtmlBuilder.GenerateHtmlAsync(stockList);
 
@@ -92,7 +92,7 @@ namespace DividendAlert.Controllers
                 _logger.LogInformation("Scraping started at " + DateTime.Now.ToString());
 
                 IList<DividendAlertData.Model.Stock> stockDbList = await _stockRepository.GetAllAsync();
-                
+
                 string[] stockList = stockDbList.Select(s => s.Name).ToArray();
 
                 // To debug just one stock 
@@ -113,7 +113,7 @@ namespace DividendAlert.Controllers
                             {
                                 Parallel.ForEach(scrapedList, async (scrapedDividend) =>
                                 {
-                                    
+
                                     await CheckAndInsertDividendAsync(stockName, scrapedDividend);
                                 });
                             }

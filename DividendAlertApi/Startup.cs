@@ -31,7 +31,7 @@ namespace DividendAlert
 
 
 
-        public const string DIVIDEND_ALERT_CORS_ORIGINS_KEY = "DividendAlertCorsOrigins";
+        private const string DIVIDEND_ALERT_CORS_ORIGINS_KEY = "DividendAlertCorsOrigins";
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -51,7 +51,7 @@ namespace DividendAlert
 
 
             services.AddMvc(options => options.OutputFormatters.Add(new HtmlOutputFormatter()));
-            
+
             services.AddControllers();
 
 
@@ -69,11 +69,11 @@ namespace DividendAlert
             services.AddSingleton<IDividendRepository>(r => new DividendRepository(mongoConnectionString, mongoDatabase));
 
 
-            AddJwtAuth(services);
+            AddJwtAuthentication(services);
         }
 
 
-        private void AddJwtAuth(IServiceCollection services)
+        private void AddJwtAuthentication(IServiceCollection services)
         {
             services.AddAuthentication(cfg =>
             {
