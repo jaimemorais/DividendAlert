@@ -9,7 +9,7 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.16" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.0.0" />
     <PackageReference Include="mongocsharpdriver" Version="2.9.3" />
-    <PackageReference Include="MongoDB.Driver" Version="2.9.3" />
+    <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />    
   </ItemGroup>
   
